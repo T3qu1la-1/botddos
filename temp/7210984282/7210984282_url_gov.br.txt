@@ -1,0 +1,98 @@
+{'pass':'cfzn1020', 'url': '00001063576416sp@al.educacao.sp.gov.br', 'user': ''}
+{'pass':'Loreto280708@', 'url': '00001088017782sp@al.educacao.sp.gov.br', 'user': ''}
+{'pass':'p16092007', 'url': '0000112027171xsp@al.educacao.sp.gov.br', 'user': ''}
+{'pass':'0123456789fds!@#', 'url': '00001136205342sp@al.educacao.sp.gov.br', 'user': ''}
+{'pass':'wsgshjhddjks', 'url': '0000112554837xsp@al.educaco.sp.gov.br', 'user': ''}
+{'pass':'g18012007', 'url': '00001128405015sp@al.educacao.sp.gov.br', 'user': ''}
+{'pass':'Vini0512*#', 'url': '00001119011000sp@al.educacao.sp.gov.br.com', 'user': ''}
+{'pass':'S@94rs32Tg88', 'url': '0000111836322xsp@al.educacao.sp.gov.br', 'user': ''}
+{'pass':'Dagoberto@2023', 'url': '00001124684207sp@al.educacao.sp.gov.br', 'user': ''}
+{'pass':'alynekimberly', 'url': '00001058107446sp@al.educacao.sp.gov.br', 'user': ''}
+{'pass':'20061118', 'url': '00001088227818sp@al.educacao.sp.gov.br', 'user': ''}
+{'pass':'Firmino23@', 'url': '00001142662159sp@al.educacao.sp.gov.br', 'user': ''}
+{'pass':'WESLEY2022', 'url': '00001125116389sp@al.educacao.sp.gov.br', 'user': ''}
+{'pass':'ers809878', 'url': '017.878.338-07@tce.sp.gov.br', 'user': ''}
+{'pass':'aluno12052005', 'url': '0000110314280xsp@al.educacao.sp.gov.br', 'user': ''}
+{'pass':'Mendonca', 'url': '00001142155699sp@al.educacao.gov.br', 'user': ''}
+{'pass':'chechu31', 'url': '00001099981700sp@aluno.educacao.sp.gov.br', 'user': ''}
+{'pass':'Cliente12', 'url': '0001142436792sp@al.educacao.gov.br', 'user': ''}
+{'pass':'josuemagdiel5', 'url': '00001101431921sp@aluno.educacao.sp.gov.br', 'user': ''}
+{'pass':'5905695', 'url': '00001125332967sp@al.educacao.sp.gov.br', 'user': ''}
+49790897120:625108
+75052032153:731900
+22122929:accounts.google.com/
+10203040:accounts.google.com/signin/v2/challenge/password/empty
+Giovanna12:https://app.quecurso.com.br/Register/VocationalTest
+{'pass':'ninafilha', 'url': '00001119364838sp@al.educacao.sp.gov.br', 'user': ''}
+{'pass':'ninafilha', 'url': '00001119364838sp@al.educacao.sp.gov.br', 'user': ''}
+{'pass':'Leo@0000', 'url': '0001127648913sp@al.educacao.sp.gov.br', 'user': ''}
+{'pass':'Leo@0000', 'url': '00001127648913sp@al.educacao.sp.gov.br', 'user': ''}
+{'pass':'dom041982', 'url': '00001081565810sp@aluno.educacao.sp.gov.br', 'user': ''}
+{'pass':'i20032006', 'url': '00001078991650sp@aluno.educacao.sp.gov.br', 'user': ''}
+{'pass':'Vinicius02', 'url': '0000105734641xsp@al.educacao.sp.gov.br', 'user': ''}
+{'pass':'emilie2011', 'url': '00001119364838@al.educacao.sp.gov.br', 'user': ''}
+{'pass':'emilie2011', 'url': '00001119364838@al.educacao.sp.gov.br', 'user': ''}
+{'pass':'Taranps260', 'url': '0000106224509xsp@al.educacao.sp.gov.br', 'user': ''}
+{'pass':'i20032006', 'url': '00001078991650sp@aluno.educacao.sp.gov.br', 'user': ''}
+{'pass':'aluno2021', 'url': '00001165892273sp@al.educacao.sp.gov.br', 'user': ''}
+{'pass':'2007132020shi', 'url': '00001109565549sp@al.educacao.sp.gov.br', 'user': ''}
+{'pass':'i20032006', 'url': '00001078991650sp@aluno.educacao.sp.gov.br', 'user': ''}
+{'pass':'0629', 'url': '00001139900316sp@al.educacao.sp.gov.br', 'user': ''}
+{'pass':'Eunice1@', 'url': '00001145213376sp@al.educacao.sp.gov.br', 'user': ''}
+{'pass':'rafaellawallq45@dani', 'url': '00001129450740sp@al.educacao.sp.gov.br', 'user': ''}
+{'pass':"etecetec'", 'url': '00001113919577sp@al.educacao.sp.gov.br', 'user': ''}
+{'pass':'Taranps260', 'url': '0000106224509xsp@al.educacao.sp.gov.br', 'user': ''}
+{'pass':'gafe4002', 'url': '00001096768495sp@aluno.educacao.sp.gov.br', 'user': ''}
+{'pass':'22167225gg', 'url': '00001119667082sp@al.educacao.sp.gov.br', 'user': ''}
+24/05/2005:accounts.google.com/signin/v2/challenge/password/empty
+naassom24032006:www.canva.com/
+Jromao1#:pt.khanacademy.org/login
+10203040:accounts.google.com/signin/v2/challenge/password/empty
+{'pass':'Cevale2023@', 'url': '00001134529806sp.sp.gov.br', 'user': ''}
+{'pass':'pe290908', 'url': '00001099882369sp@al.educacao.sp.gov.br', 'user': ''}
+qualidade.hgb@gmail.com:eF*t9pFsQDAAp7Y
+05595473150:Evom@x123
+22122929:accounts.google.com/
+maria2020:accounts.google.com/signin/v2/challenge/password/empty
+hebert.contabil@outlook.com:flamengo1
+{'pass':'0629', 'url': '00001139900316sp@al.educacao.sp.gov.br', 'user': ''}
+{'pass':'Vinicius02', 'url': '0000105734641xsp@al.educacao.sp.gov.br', 'user': ''}
+{'pass':'2007132020shi', 'url': '00001109565549sp@al.educacao.sp.gov.br', 'user': ''}
+{'pass':"etecetec'", 'url': '00001113919577sp@al.educacao.sp.gov.br', 'user': ''}
+{'pass':'i20032006', 'url': '00001078991650sp@aluno.educacao.sp.gov.br', 'user': ''}
+{'pass':'dom041982', 'url': '00001081565810sp@aluno.educacao.sp.gov.br', 'user': ''}
+{'pass':'Leo@0000', 'url': '0001127648913sp@al.educacao.sp.gov.br', 'user': ''}
+{'pass':'Leo@0000', 'url': '00001127648913sp@al.educacao.sp.gov.br', 'user': ''}
+{'pass':'i20032006', 'url': '00001078991650sp@aluno.educacao.sp.gov.br', 'user': ''}
+Giovanna12:https://app.quecurso.com.br/Register/VocationalTest
+{'pass':'1234567891011', 'url': '00001109472900sp@al.educacao.sp.gov.br', 'user': ''}
+{'pass':'12345678910', 'url': '00001109472900sp@al.educacao.sp.gov.br', 'user': ''}
+{'pass':'12345678910', 'url': '00001088287311sp@al.educacao.sp.gov.br', 'user': ''}
+{'pass':'jh18042009', 'url': '00001141753662sp@al.educacao.sp.gov.br', 'user': ''}
+{'pass':'aluno123', 'url': '00001103396638sp@al.educacao.sp.gov.br', 'user': ''}
+{'pass':'12345678910', 'url': '00001088287311sp@al.educacao.sp.gov.br', 'user': ''}
+{'pass':'56566565bbbb', 'url': '0000114039485xsp@al.educacao.sp.gov.br', 'user': ''}
+{'pass':'56566565bbbb', 'url': '0000114039485xsp@al.educacao.sp.gov.br', 'user': ''}
+{'pass':'aluno123', 'url': '00001103396638sp@al.educacao.sp.gov.br', 'user': ''}
+{'pass':'23051979', 'url': '00001112861579sp@al.educacao.sp.gov.br', 'user': ''}
+{'pass':'izq7x3zc8xrnmb', 'url': '00001063688632sp@aluno.educacao.sp.gov.br', 'user': ''}
+{'pass':'1234567891011', 'url': '00001109472900sp@al.educacao.sp.gov.br', 'user': ''}
+{'pass':'12345678910', 'url': '00001109472900sp@al.educacao.sp.gov.br', 'user': ''}
+{'pass':'12345678910', 'url': '00001088287311sp@al.educacao.sp.gov.br', 'user': ''}
+vinidias123:login.live.com/ppsecure/post.srf
+@Proatec2023:accounts.google.com/
+pantoja2022:accounts.google.com/signin/v2/challenge/password/empty
+Ar12345@:accounts.google.com/
+cmsp2021:https://accounts.google.com/signin/v2/challenge/pwd
+12345678:https://accounts.google.com/
+01072530:https://accounts.google.com/signin/v2/challenge/pwd
+kle783210:https://myaccount.google.com/u/1/signinoptions/password
+kle110278:https://accounts.google.com/signin/v2/identifier
+kle110278:https://accounts.google.com/signin/v2/challenge/pwd
+45196600:https://login.microsoftonline.com/common/oauth2/authorize
+123456789:https://accounts.google.com/
+02110620:https://accounts.google.com/signin/v2/challenge/pwd
+CLA120192@@@##:https://accounts.google.com/signin/v2/challenge/pwd
+sinharinha:https://accounts.google.com/signin/v2/challenge/pwd
+sinharinha:https://accounts.google.com/signin/v2/identifier
+3061173r:https://www.canva.com/pt_br/signup/

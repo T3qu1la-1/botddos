@@ -1,0 +1,588 @@
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: 'cfzn1020', 'url': '00001063576416sp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: 'Loreto280708@', 'url': '00001088017782sp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: 'p16092007', 'url': '0000112027171xsp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: '0123456789fds!@#', 'url': '00001136205342sp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: 'wsgshjhddjks', 'url': '0000112554837xsp@al.educaco.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: 'g18012007', 'url': '00001128405015sp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: 'Vini0512*#', 'url': '00001119011000sp@al.educacao.sp.gov.br.com', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: 'S@94rs32Tg88', 'url': '0000111836322xsp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: 'Dagoberto@2023', 'url': '00001124684207sp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: 'alynekimberly', 'url': '00001058107446sp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: '20061118', 'url': '00001088227818sp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: 'Firmino23@', 'url': '00001142662159sp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: 'WESLEY2022', 'url': '00001125116389sp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: 'ers809878', 'url': '017.878.338-07@tce.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: 'aluno12052005', 'url': '0000110314280xsp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: 'Mendonca', 'url': '00001142155699sp@al.educacao.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: 'chechu31', 'url': '00001099981700sp@aluno.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: 'Cliente12', 'url': '0001142436792sp@al.educacao.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: 'josuemagdiel5', 'url': '00001101431921sp@aluno.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: '5905695', 'url': '00001125332967sp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: 49790897120
+• SENHA: 625108
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: 75052032153
+• SENHA: 731900
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: 22122929
+• SENHA: accounts.google.com/
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: 10203040
+• SENHA: accounts.google.com/signin/v2/challenge/password/empty
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: Giovanna12
+• SENHA: https://app.quecurso.com.br/Register/VocationalTest
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: 'ninafilha', 'url': '00001119364838sp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: 'ninafilha', 'url': '00001119364838sp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: 'Leo@0000', 'url': '0001127648913sp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: 'Leo@0000', 'url': '00001127648913sp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: 'dom041982', 'url': '00001081565810sp@aluno.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: 'i20032006', 'url': '00001078991650sp@aluno.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: 'Vinicius02', 'url': '0000105734641xsp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: 'emilie2011', 'url': '00001119364838@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: 'emilie2011', 'url': '00001119364838@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: 'Taranps260', 'url': '0000106224509xsp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: 'i20032006', 'url': '00001078991650sp@aluno.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: 'aluno2021', 'url': '00001165892273sp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: '2007132020shi', 'url': '00001109565549sp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: 'i20032006', 'url': '00001078991650sp@aluno.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: '0629', 'url': '00001139900316sp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: 'Eunice1@', 'url': '00001145213376sp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: 'rafaellawallq45@dani', 'url': '00001129450740sp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: "etecetec'", 'url': '00001113919577sp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: 'Taranps260', 'url': '0000106224509xsp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: 'gafe4002', 'url': '00001096768495sp@aluno.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: '22167225gg', 'url': '00001119667082sp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: 24/05/2005
+• SENHA: accounts.google.com/signin/v2/challenge/password/empty
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: naassom24032006
+• SENHA: www.canva.com/
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: Jromao1#
+• SENHA: pt.khanacademy.org/login
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: 10203040
+• SENHA: accounts.google.com/signin/v2/challenge/password/empty
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: 'Cevale2023@', 'url': '00001134529806sp.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: 'pe290908', 'url': '00001099882369sp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: qualidade.hgb@gmail.com
+• SENHA: eF*t9pFsQDAAp7Y
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: 05595473150
+• SENHA: Evom@x123
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: 22122929
+• SENHA: accounts.google.com/
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: maria2020
+• SENHA: accounts.google.com/signin/v2/challenge/password/empty
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: hebert.contabil@outlook.com
+• SENHA: flamengo1
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: '0629', 'url': '00001139900316sp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: 'Vinicius02', 'url': '0000105734641xsp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: '2007132020shi', 'url': '00001109565549sp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: "etecetec'", 'url': '00001113919577sp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: 'i20032006', 'url': '00001078991650sp@aluno.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: 'dom041982', 'url': '00001081565810sp@aluno.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: 'Leo@0000', 'url': '0001127648913sp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: 'Leo@0000', 'url': '00001127648913sp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: 'i20032006', 'url': '00001078991650sp@aluno.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: Giovanna12
+• SENHA: https://app.quecurso.com.br/Register/VocationalTest
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: '1234567891011', 'url': '00001109472900sp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: '12345678910', 'url': '00001109472900sp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: '12345678910', 'url': '00001088287311sp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: 'jh18042009', 'url': '00001141753662sp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: 'aluno123', 'url': '00001103396638sp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: '12345678910', 'url': '00001088287311sp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: '56566565bbbb', 'url': '0000114039485xsp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: '56566565bbbb', 'url': '0000114039485xsp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: 'aluno123', 'url': '00001103396638sp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: '23051979', 'url': '00001112861579sp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: 'izq7x3zc8xrnmb', 'url': '00001063688632sp@aluno.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: '1234567891011', 'url': '00001109472900sp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: '12345678910', 'url': '00001109472900sp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: {'pass'
+• SENHA: '12345678910', 'url': '00001088287311sp@al.educacao.sp.gov.br', 'user': ''}
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: vinidias123
+• SENHA: login.live.com/ppsecure/post.srf
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: @Proatec2023
+• SENHA: accounts.google.com/
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: pantoja2022
+• SENHA: accounts.google.com/signin/v2/challenge/password/empty
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: Ar12345@
+• SENHA: accounts.google.com/
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: cmsp2021
+• SENHA: https://accounts.google.com/signin/v2/challenge/pwd
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: 12345678
+• SENHA: https://accounts.google.com/
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: 01072530
+• SENHA: https://accounts.google.com/signin/v2/challenge/pwd
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: kle783210
+• SENHA: https://myaccount.google.com/u/1/signinoptions/password
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: kle110278
+• SENHA: https://accounts.google.com/signin/v2/identifier
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: kle110278
+• SENHA: https://accounts.google.com/signin/v2/challenge/pwd
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: 45196600
+• SENHA: https://login.microsoftonline.com/common/oauth2/authorize
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: 123456789
+• SENHA: https://accounts.google.com/
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: 02110620
+• SENHA: https://accounts.google.com/signin/v2/challenge/pwd
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: CLA120192@@@##
+• SENHA: https://accounts.google.com/signin/v2/challenge/pwd
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: sinharinha
+• SENHA: https://accounts.google.com/signin/v2/challenge/pwd
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: sinharinha
+• SENHA: https://accounts.google.com/signin/v2/identifier
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
+• SERVIÇO: gov.br
+• USUÁRIO: 3061173r
+• SENHA: https://www.canva.com/pt_br/signup/
+• FONTE: API Externa
+• QUALIDADE: Verificado
+
