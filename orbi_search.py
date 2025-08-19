@@ -54,89 +54,66 @@ class OrbiSearch:
         
         print(f"🌐 Conectando à API real do Orbi Space...")
         
-        # URLs da API real do Orbi Space
-        orbi_apis = [
-            "https://orbispace.io/api/search",
-            "https://api.orbispace.io/search", 
-            "https://orbi.space/api/lookup",
-            "https://search.orbispace.io/query"
-        ]
+        # URL da API real do Orbi Space (encontrada no código)
+        orbi_base_url = "https://orbi-space.shop/api/"
         
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
             'Accept': 'application/json, text/plain, */*',
-            'Content-Type': 'application/json',
-            'Referer': 'https://orbispace.io/',
-            'Origin': 'https://orbispace.io'
+            'Referer': 'https://orbi-space.shop/',
+            'Origin': 'https://orbi-space.shop'
         }
         
-        # Tentar diferentes formatos de requisição
-        query_formats = [
-            {"query": query, "type": "domain"},
-            {"search": query, "format": "json"},
-            {"domain": query, "limit": 10000},
-            {"target": query, "output": "credentials"}
+        # Tentar múltiplos formatos de requisição baseados no código encontrado
+        api_endpoints = [
+            f"{orbi_base_url}base=clouds&token=teste&query={query}",
+            f"{orbi_base_url}search?domain={query}",
+            f"{orbi_base_url}lookup?target={query}",
+            f"{orbi_base_url}query={query}&format=json"
         ]
         
-        for api_url in orbi_apis:
-            if self.cancel_flag.get('cancelled'):
-                break
-                
-            for query_format in query_formats:
-                if self.cancel_flag.get('cancelled'):
-                    break
-                    
-                try:
-                    print(f"🔍 Testando: {api_url} com formato {query_format}")
-                    
-                    # Tentar POST
-                    response = requests.post(
-                        api_url, 
-                        json=query_format,
-                        headers=headers,
-                        timeout=30,
-                        verify=False
-                    )
-                    
-                    if response.status_code == 200:
-                        print(f"✅ API respondeu: {response.status_code}")
-                        contador += self._process_real_api_response(response, f_raw, f_fmt)
-                        
-                        if contador > 0:
-                            print(f"✅ Encontrados {contador} logins reais na API")
-                            return contador
-                    else:
-                        print(f"❌ API respondeu: {response.status_code}")
-                        
-                except requests.exceptions.RequestException as e:
-                    print(f"❌ Erro na API {api_url}: {str(e)[:100]}")
-                    continue
-                except Exception as e:
-                    print(f"❌ Erro geral: {str(e)[:100]}")
-                    continue
-        
-        # Se não encontrou nada nas APIs, tentar método GET
-        print("🔄 Tentando método GET...")
-        for api_url in orbi_apis:
+        for api_url in api_endpoints:
             if self.cancel_flag.get('cancelled'):
                 break
                 
             try:
-                get_url = f"{api_url}?q={query}&format=json"
-                response = requests.get(get_url, headers=headers, timeout=30, verify=False)
+                print(f"🔍 Testando endpoint: {api_url}")
+                
+                # Tentar GET (baseado no diagnóstico encontrado)
+                response = requests.get(
+                    api_url,
+                    headers=headers,
+                    timeout=30,
+                    verify=False
+                )
+                
+                print(f"📡 Resposta HTTP: {response.status_code}")
                 
                 if response.status_code == 200:
-                    print(f"✅ GET API respondeu: {response.status_code}")
-                    contador += self._process_real_api_response(response, f_raw, f_fmt)
+                    print(f"✅ API respondeu com sucesso!")
+                    contador = self._process_real_api_response(response, f_raw, f_fmt)
                     
                     if contador > 0:
+                        print(f"✅ Encontrados {contador} logins reais na API")
                         return contador
+                    else:
+                        print("📝 Resposta válida mas sem credenciais")
                         
+                elif response.status_code == 404:
+                    print(f"❌ Endpoint não encontrado: {api_url}")
+                    continue
+                else:
+                    print(f"❌ Erro HTTP {response.status_code}")
+                    continue
+                        
+            except requests.exceptions.RequestException as e:
+                print(f"❌ Erro de conexão: {str(e)[:100]}")
+                continue
             except Exception as e:
-                print(f"❌ Erro GET: {str(e)[:100]}")
+                print(f"❌ Erro geral: {str(e)[:100]}")
                 continue
         
-        print("❌ Nenhuma API real do Orbi respondeu com dados")
+        print("❌ Nenhum endpoint do Orbi-space.shop respondeu com credenciais")
         return 0
     
     def _process_real_api_response(self, response, f_raw, f_fmt):

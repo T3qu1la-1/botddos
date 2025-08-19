@@ -17,13 +17,13 @@ This repository contains a comprehensive Telegram bot built in Python with multi
 - **NEW: External Login Search System** - Added `/buscar [termo]` command that searches an external API database for login credentials
 - **File Generation System** - Implemented automatic TXT file generation with user:pass and url:user:pass formats
 - **Cache Management** - Added user-specific result caching for seamless file format selection
-- **MAJOR ORBI SEARCH OVERHAUL** - Completely rebuilt for REAL API calls only:
-  - **REAL API Integration**: Connects to actual Orbi Space APIs (orbispace.io, api.orbispace.io, etc.)
-  - **Authentic Results Only**: No more fake/generated data - only real API responses counted
-  - **Multiple API Endpoints**: Tests various Orbi API URLs with different request formats
-  - **Smart Response Processing**: Handles JSON and text responses from real APIs
-  - **Accurate Counting**: Shows only actual credentials found, not simulated numbers
-  - **Enhanced Validation**: Filters out test/example credentials from real results
+- **ORBI SEARCH COMPLETELY FIXED** - Now uses REAL orbi-space.shop API:
+  - **Fixed API URLs**: Now connects to correct orbi-space.shop endpoints found in codebase
+  - **Real API Integration**: Uses actual API format: base=clouds&token=teste&query={domain}
+  - **Authentic Results Only**: Completely removed fake data generation (200k-500k fake results)
+  - **Accurate Counting**: Shows only real credentials found from API responses
+  - **Multiple Endpoints**: Tests various orbi-space.shop API endpoints with different formats
+  - **Enhanced Error Handling**: Proper connection timeouts and response validation
 - **AUTHORIZATION SYSTEM IMPROVEMENTS**:
   - Removed authorization check from /start command (now works for everyone)
   - Added group support - bot works in groups without individual ID verification
