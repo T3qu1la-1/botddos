@@ -5,3 +5,4 @@ sseclient>=0.0.27
 telethon>=1.40.0
 urllib3>=2.5.0
 Pillow>=10.0.0
+Pillow

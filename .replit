@@ -26,3 +26,6 @@ args = "pip install -r requirements.txt && python main.py"
 
 [workflows.workflow.metadata]
 outputType = "console"
+
+[agent]
+expertMode = true
