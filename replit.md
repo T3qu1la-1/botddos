@@ -4,6 +4,15 @@ This repository contains a comprehensive Telegram bot built in Python with multi
 
 ## Recent Changes (August 19, 2025)
 
+### System Updates - Latest Session
+- **ORBI SEARCH API REMOVAL** - Completely removed all Orbi Search functionality as requested
+- **NEW URL SEARCH API INTEGRATION** - Added http://147.79.86.21:5019/search?term= API for /url command  
+- **IMPROVED LOGIN SEARCH RESPONSE HANDLING** - Enhanced logins_search.py with better error handling, duplicate prevention, and quality validation
+- **CALLBACK HANDLER UPDATES** - Updated format1_orbi/format2_orbi to format1_url/format2_url handlers
+- **DIAGNOSTIC SYSTEM UPDATED** - Replaced Orbi diagnostic tests with new external API connectivity tests
+
+### Previous Updates
+
 **MIGRATION TO REPLIT ENVIRONMENT COMPLETED**
 - ✅ Successfully migrated from Replit Agent to native Replit environment
 - ✅ All dependencies installed and configured properly 

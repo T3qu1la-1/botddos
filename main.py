@@ -58,14 +58,199 @@ except ImportError as e:
     def analyze_website_apis_comprehensive(url):
         return {"error": "Módulo API Analyzer não está disponível"}
 
-# Importar Orbi Search
-try:
-    from orbi_search import OrbiSearch
-    ORBI_SEARCH_AVAILABLE = True
-    print("✅ Orbi Search carregado com sucesso")
-except ImportError as e:
-    ORBI_SEARCH_AVAILABLE = False
-    print(f"⚠️ Orbi Search não disponível: {e}")
+# URL Search API Implementation
+def url_search_api(query, id_user, pasta_temp, cancel_flag, contador_callback=None):
+    """Busca logins usando a API http://147.79.86.21:5019/search?term="""
+    import requests
+    import re
+    import os
+    import json
+    
+    # Limpar o nome da query para usar no filename
+    clean_query = re.sub(r'[^\w\.-]', '_', query)[:20]
+    raw_path = os.path.join(pasta_temp, f"{id_user}_url_{clean_query}.txt")
+    formatado_path = os.path.join(pasta_temp, f"{id_user}_url_{clean_query}_formatado.txt")
+    
+    contador = 0
+    
+    print(f"🔍 Iniciando busca na API Externa para: {query}")
+    
+    try:
+        with open(raw_path, "w", encoding="utf-8") as f_raw, open(formatado_path, "w", encoding="utf-8") as f_fmt:
+            
+            # Fazer requisição para a API
+            api_url = f"http://147.79.86.21:5019/search?term={query}"
+            
+            headers = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                'Accept': 'application/json, text/plain, */*'
+            }
+            
+            print(f"🌐 Conectando à API: {api_url}")
+            
+            response = requests.get(api_url, headers=headers, timeout=30)
+            
+            if response.status_code == 200:
+                print("✅ API respondeu com sucesso!")
+                
+                try:
+                    # Tentar processar como JSON
+                    data = response.json()
+                    
+                    # Processar diferentes estruturas de resposta
+                    items_to_process = []
+                    
+                    if isinstance(data, list):
+                        items_to_process = data
+                    elif isinstance(data, dict):
+                        # Procurar campos comuns
+                        for field in ['data', 'results', 'items', 'credentials', 'logins', 'accounts']:
+                            if field in data and isinstance(data[field], list):
+                                items_to_process = data[field]
+                                break
+                        
+                        if not items_to_process:
+                            items_to_process = [data]
+                    
+                    print(f"📊 Processando {len(items_to_process)} itens da API")
+                    
+                    for item in items_to_process:
+                        if cancel_flag.get('cancelled'):
+                            break
+                        
+                        user, passwd = extract_credentials_from_item(item)
+                        
+                        if validate_credentials(user, passwd):
+                            user_clean = clean_string(user)
+                            passwd_clean = clean_string(passwd)
+                            
+                            if user_clean and passwd_clean:
+                                f_raw.write(f"{user_clean}:{passwd_clean}\n")
+                                f_fmt.write(f"• SERVIÇO: {query}\n• USUÁRIO: {user_clean}\n• SENHA: {passwd_clean}\n• FONTE: API Externa\n• QUALIDADE: Verificado\n\n")
+                                contador += 1
+                                
+                                if contador_callback:
+                                    contador_callback(contador)
+                    
+                except json.JSONDecodeError:
+                    # Processar como texto
+                    content = response.text.strip()
+                    print(f"📝 Processando resposta como texto")
+                    
+                    lines = content.split('\n')
+                    for line in lines:
+                        if cancel_flag.get('cancelled'):
+                            break
+                        
+                        line = line.strip()
+                        if ':' in line:
+                            user, passwd = extract_credentials_from_text(line)
+                            
+                            if validate_credentials(user, passwd):
+                                user_clean = clean_string(user)
+                                passwd_clean = clean_string(passwd)
+                                
+                                if user_clean and passwd_clean:
+                                    f_raw.write(f"{user_clean}:{passwd_clean}\n")
+                                    f_fmt.write(f"• SERVIÇO: {query}\n• USUÁRIO: {user_clean}\n• SENHA: {passwd_clean}\n• FONTE: API Externa\n• QUALIDADE: Verificado\n\n")
+                                    contador += 1
+                                    
+                                    if contador_callback:
+                                        contador_callback(contador)
+            
+            else:
+                print(f"❌ API retornou status {response.status_code}")
+                
+    except Exception as e:
+        print(f"❌ Erro na busca URL: {str(e)}")
+        # Criar arquivos vazios para evitar erro None
+        try:
+            with open(raw_path, "w", encoding="utf-8") as f:
+                pass
+            with open(formatado_path, "w", encoding="utf-8") as f:
+                pass
+        except:
+            pass
+    
+    print(f"📈 Busca URL finalizada: {contador} logins encontrados")
+    return raw_path, formatado_path
+
+def extract_credentials_from_item(item):
+    """Extrai credenciais de um item da API"""
+    user = ""
+    passwd = ""
+    
+    try:
+        if isinstance(item, dict):
+            # Campos comuns para usuário
+            user_fields = ['email', 'username', 'user', 'login', 'account']
+            pass_fields = ['password', 'pass', 'passwd', 'pwd']
+            
+            for field in user_fields:
+                if field in item and item[field]:
+                    user = str(item[field]).strip()
+                    break
+            
+            for field in pass_fields:
+                if field in item and item[field]:
+                    passwd = str(item[field]).strip()
+                    break
+            
+            # Se não encontrou nos campos, tentar como string
+            if not user or not passwd:
+                item_str = str(item)
+                if ':' in item_str:
+                    return extract_credentials_from_text(item_str)
+        
+        elif isinstance(item, str):
+            return extract_credentials_from_text(item)
+            
+    except Exception as e:
+        print(f"❌ Erro ao extrair credencial: {str(e)}")
+    
+    return user, passwd
+
+def extract_credentials_from_text(text):
+    """Extrai credencial de uma string no formato user:pass"""
+    try:
+        if ':' in text:
+            parts = text.strip().split(':', 1)
+            if len(parts) == 2:
+                user = parts[0].strip()
+                passwd = parts[1].strip()
+                return user, passwd
+    except Exception as e:
+        print(f"❌ Erro ao extrair credencial de '{text}': {str(e)}")
+    
+    return "", ""
+
+def validate_credentials(user, passwd):
+    """Valida se a credencial é válida"""
+    if not user or not passwd:
+        return False
+    
+    if len(user) < 3 or len(passwd) < 1:
+        return False
+    
+    # Filtrar credenciais de exemplo/teste
+    invalid_users = {'test', 'example', 'admin', 'user', 'demo', 'sample'}
+    invalid_passwords = {'test', 'example', 'password', 'demo', 'sample'}
+    
+    if user.lower() in invalid_users or passwd.lower() in invalid_passwords:
+        return False
+    
+    return True
+
+def clean_string(texto):
+    """Limpa uma string removendo caracteres inválidos"""
+    if not texto:
+        return ""
+    
+    # Remover caracteres de controle e espaços extras
+    texto = re.sub(r'[\x00-\x1f\x7f-\x9f]', '', texto)
+    texto = texto.strip()
+    
+    return texto
 
 
 # Cache de resultados por usuário para nova busca
@@ -2249,7 +2434,7 @@ async def verificar_comando_errado(event):
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
             "📋 **COMANDOS MAIS USADOS:**\n"
             "• `/start` - Iniciar o bot\n"
-            "• `/url [dominio]` - Buscar logins Orbi\n"
+            "• `/url [dominio]` - Buscar logins via API externa\n"
             "• `/search [url]` - Buscar logins PatronHost\n"
             "• `/buscar [termo]` - Busca geral\n"
             "• `/webscraper [url]` - Extrair dados\n"
@@ -2277,7 +2462,7 @@ async def verificar_comando_errado(event):
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
             "📋 **COMANDOS PRINCIPAIS:**\n"
             "• `/start` - Iniciar o bot\n"
-            "• `/url [dominio]` - Buscar logins Orbi\n"
+            "• `/url [dominio]` - Buscar logins via API externa\n"
             "• `/search [url]` - Buscar logins PatronHost\n"
             "• `/buscar [termo]` - Busca geral\n"
             "• `/webscraper [url]` - Extrair dados\n"
@@ -2460,25 +2645,25 @@ async def url_handler(event):
     # Comando especial de diagnóstico
     if query.lower() == "diagnostico" or query.lower() == "test":
         await event.reply(
-            "🔧 **DIAGNÓSTICO DO ORBI SEARCH**\n\n"
+            "🔧 **DIAGNÓSTICO DO URL SEARCH**\n\n"
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
-            "⏳ **Testando Orbi API...**\n\n"
-            "🌌 Verificando conectividade com orbi-space.shop...",
+            "⏳ **Testando API Externa...**\n\n"
+            "🌐 Verificando conectividade com servidor externo...",
             buttons=[[Button.inline("🗑️ Apagar", data=f"apagarmensagem:{id_user}")]]
         )
         
-        # Testar API Orbi
-        diagnostico_msg = "🔧 **RESULTADO DO DIAGNÓSTICO ORBI**\n\n"
+        # Testar API Externa
+        diagnostico_msg = "🔧 **RESULTADO DO DIAGNÓSTICO URL SEARCH**\n\n"
         diagnostico_msg += "━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
         
         try:
-            response = requests.get("https://orbi-space.shop/api/base=clouds&token=teste&query=test", timeout=10)
-            status = "✅ ONLINE" if response.status_code in [200, 404] else f"❌ HTTP {response.status_code}"
-            diagnostico_msg += f"**Orbi API:** {status}\n"
+            response = requests.get("http://147.79.86.21:5019/search?term=test", timeout=10)
+            status = "✅ ONLINE" if response.status_code == 200 else f"❌ HTTP {response.status_code}"
+            diagnostico_msg += f"**API Externa:** {status}\n"
         except Exception as e:
-            diagnostico_msg += f"**Orbi API:** ❌ ERRO - {str(e)[:30]}...\n"
+            diagnostico_msg += f"**API Externa:** ❌ ERRO - {str(e)[:30]}...\n"
         
-        diagnostico_msg += f"\n📊 **Sistema Orbi:** {'✅ Funcionando' if ORBI_SEARCH_AVAILABLE else '❌ Com problemas'}\n"
+        diagnostico_msg += f"\n📊 **Sistema URL Search:** ✅ Funcionando\n"
         diagnostico_msg += f"🌐 **Conectividade:** ✅ OK\n"
         diagnostico_msg += f"💾 **Espaço em disco:** ✅ Disponível\n\n"
         diagnostico_msg += "━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
@@ -2508,13 +2693,7 @@ async def url_handler(event):
             buttons=[[Button.inline("🗑️ Apagar", data=f"apagarmensagem:{id_user}")]]
         )
 
-    if not ORBI_SEARCH_AVAILABLE:
-        return await event.reply(
-            "❌ **ORBI SEARCH INDISPONÍVEL**\n\n"
-            "⚠️ O módulo Orbi Search não está disponível no momento.\n\n"
-            "💡 Use `/search` como alternativa.\n\n"
-            "🤖 @DM1"
-        )
+    # API de URL search implementada abaixo
 
     if id_user in usuarios_bloqueados:
         return await event.reply(
@@ -2544,14 +2723,14 @@ async def url_handler(event):
     os.makedirs(pasta_temp, exist_ok=True)
 
     msg_busca = await event.reply(
-        "🌌 **INICIANDO ORBI SEARCH...**\n\n"
+        "🔍 **INICIANDO URL SEARCH...**\n\n"
         "━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
         "🎯 **QUERY:** `Analisando...`\n"
         "📊 **LOGINS ENCONTRADOS:** `0`\n"
-        "⚡ **STATUS:** `Conectando à nuvem...`\n"
-        "🌌 **FONTE:** `Orbi Space API`\n\n"
+        "⚡ **STATUS:** `Conectando à API...`\n"
+        "🌐 **FONTE:** `API Externa`\n\n"
         "━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
-        "🚀 **Versão melhorada com mais resultados!**\n\n"
+        "🚀 **Sistema de busca melhorado!**\n\n"
         "🤖 @DM1",
         buttons=[
             [Button.inline("⏹️ Parar", data=f"cancelarbusca:{id_user}")],
@@ -2570,14 +2749,14 @@ async def url_handler(event):
             await asyncio.sleep(3)
             try:
                 await msg_busca.edit(
-                    f"🌌 **ORBI SEARCH EM ANDAMENTO...**\n\n"
+                    f"🔍 **URL SEARCH EM ANDAMENTO...**\n\n"
                     "━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
                     f"🎯 **QUERY:** `{urls_busca.get(id_user, 'N/A')}`\n"
                     f"📊 **LOGINS ENCONTRADOS:** `{contador_atual}`\n"
-                    "⚡ **STATUS:** `Extraindo da nuvem...`\n"
-                    "🌌 **FONTE:** `Orbi Space API`\n\n"
+                    "⚡ **STATUS:** `Processando dados...`\n"
+                    "🌐 **FONTE:** `API Externa`\n\n"
                     "━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
-                    "🚀 **API melhorada - Mais resultados!**\n\n"
+                    "🚀 **Sistema de busca otimizado!**\n\n"
                     "🤖 @DM1",
                     buttons=[
                         [Button.inline("⏹️ Parar", data=f"cancelarbusca:{id_user}")],
@@ -2588,7 +2767,7 @@ async def url_handler(event):
                 pass
 
     def buscar_wrapper():
-        return OrbiSearch(query, id_user, pasta_temp, tasks_canceladas[hash_nome], contador_callback).buscar()
+        return url_search_api(query, id_user, pasta_temp, tasks_canceladas[hash_nome], contador_callback)
 
     tarefa_editar = asyncio.create_task(editar_mensagem_periodicamente())
     arquivo_raw, arquivo_formatado = await asyncio.to_thread(buscar_wrapper)
@@ -2612,18 +2791,18 @@ async def url_handler(event):
         return
 
     await msg_busca.edit(
-        f"✅ **ORBI SEARCH CONCLUÍDA!**\n\n"
+        f"✅ **URL SEARCH CONCLUÍDA!**\n\n"
         "━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
         f"🎯 **QUERY:** `{urls_busca.get(id_user, 'N/A')}`\n"
         f"📊 **LOGINS ENCONTRADOS:** `{qtd_logins}`\n"
         "⚡ **STATUS:** `Concluído`\n"
-        "🌌 **FONTE:** `Orbi Space API`\n\n"
+        "🌐 **FONTE:** `API Externa`\n\n"
         "━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
         "📥 **ESCOLHA O FORMATO:**\n\n"
         "🤖 @DM1",
         buttons=[
-            [Button.inline("📝 USER:PASS", data=f"format1_orbi:{id_user}"),
-             Button.inline("📋 FORMATADO", data=f"format2_orbi:{id_user}")],
+            [Button.inline("📝 USER:PASS", data=f"format1_url:{id_user}"),
+             Button.inline("📋 FORMATADO", data=f"format2_url:{id_user}")],
             [Button.inline("🚫 CANCELAR", data=f"cancel:{id_user}")]
         ]
     )
@@ -4440,24 +4619,24 @@ async def callback_handler(event):
                 "💡 Tente novamente ou verifique a URL."
             , buttons=[])
 
-    elif acao in ["format1_orbi", "format2_orbi"]:
+    elif acao in ["format1_url", "format2_url"]:
         pasta = f"temp/{id_user_btn}/"
         # Procurar arquivos com o padrão que inclui a query
         import glob
-        if acao == "format1_orbi":
-            pattern = f"{id_user_btn}_orbi_*.txt"
-            formatted_pattern = f"{id_user_btn}_orbi_*_formatado.txt"
+        if acao == "format1_url":
+            pattern = f"{id_user_btn}_url_*.txt"
+            formatted_pattern = f"{id_user_btn}_url_*_formatado.txt"
             # Excluir os formatados
             files = [f for f in glob.glob(os.path.join(pasta, pattern)) if not f.endswith("_formatado.txt")]
         else:
-            pattern = f"{id_user_btn}_orbi_*_formatado.txt"
+            pattern = f"{id_user_btn}_url_*_formatado.txt"
             files = glob.glob(os.path.join(pasta, pattern))
         
         if files:
             caminho = files[0]  # Pegar o primeiro arquivo encontrado
         else:
             # Fallback para o padrão antigo
-            nome = f"{id_user_btn}_orbi.txt" if acao == "format1_orbi" else f"{id_user_btn}_orbi_formatado.txt"
+            nome = f"{id_user_btn}_url.txt" if acao == "format1_url" else f"{id_user_btn}_url_formatado.txt"
             caminho = os.path.join(pasta, nome)
 
         if not os.path.exists(caminho):
