@@ -15,6 +15,7 @@ This repository contains a comprehensive Telegram bot built in Python with multi
 - **DIAGNOSTIC SYSTEM UPDATED** - Replaced Orbi diagnostic tests with new external API connectivity tests
 - **CLEAN ORGANIZED STRUCTURE** - All functions, systems, and buttons properly organized and tested
 - **IMPROVED ERROR HANDLING** - Better error management throughout all systems
+- **ADDED USER REQUESTED BUTTONS** - Added "🔑 Adquirir APIs" (https://xpldata.com) and "👤 Contatar Dono" (https://t.me/inatuavel) buttons to /start menu
 
 ### Previous Updates
 

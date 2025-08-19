@@ -2380,7 +2380,8 @@ async def start_handler(event):
                  Button.inline("🕷️ Scraper", data=f"menu_scraper:{user_id}")],
                 [Button.inline("🔒 Security", data=f"menu_security:{user_id}"),
                  Button.inline("🔍 Checkers", data=f"menu_checkers:{user_id}")],
-                [Button.url("🧑‍💻 | SUPORTE", "https://t.me/Maygreit")]
+                [Button.url("🔑 Adquirir APIs", "https://xpldata.com"),
+                 Button.url("👤 Contatar Dono", "https://t.me/inatuavel")]
             ]
         )
         print(f"✅ Resposta /start enviada para {user_id}")
@@ -4110,6 +4111,8 @@ async def callback_handler(event):
                  Button.inline("🕷️ Scraper", data=f"menu_scraper:{id_user_btn}")],
                 [Button.inline("🔒 Security", data=f"menu_security:{id_user_btn}"),
                  Button.inline("🔍 Checkers", data=f"menu_checkers:{id_user_btn}")],
+                [Button.url("🔑 Adquirir APIs", "https://xpldata.com"),
+                 Button.url("👤 Contatar Dono", "https://t.me/inatuavel")],
                 [Button.inline("🗑️ Fechar", data=f"apagarmensagem:{id_user_btn}")]
             ]
         )
@@ -8378,220 +8381,9 @@ async def checker_handler(event):
         ]
     )
 
-# Handlers do sistema de divulgação (apenas para o dono)
-@bot.on(events.NewMessage(pattern=r'^/on$'))
-async def ativar_divulgacao(event):
-    """Ativa o sistema de divulgação automática"""
-    global divulgacao_ativa
-    user_id = event.sender_id
+# Handlers do sistema de divulgação removidos - v6 limpo
 
-    if not eh_dono(user_id):
-        await event.reply("🚫 **Acesso negado!** Apenas o dono pode usar este comando.")
-        return
-
-    if not divulgacao_ativa and chats_autorizados:
-        divulgacao_ativa = True
-        # Criar task para divulgação em background
-        asyncio.create_task(enviar_divulgacao())
-
-        await event.reply(
-            f"✅ **DIVULGAÇÃO AUTOMÁTICA ATIVADA!**\n\n"
-            f"📊 **Configuração:**\n"
-            f"• Chats autorizados: {len(chats_autorizados)}\n"
-            f"• Intervalo: 20 minutos\n"
-            f"• Status: Ativo\n\n"
-            "🔄 Mensagens serão enviadas automaticamente."
-        )
-    elif divulgacao_ativa:
-        await event.reply("⚠️ **A divulgação automática já está ativa.**")
-    else:
-        await event.reply("❌ **Nenhum chat autorizado!** Use `/addchat` primeiro.")
-
-@bot.on(events.NewMessage(pattern=r'^/off$'))
-async def desativar_divulgacao(event):
-    """Desativa o sistema de divulgação automática"""
-    global divulgacao_ativa
-    user_id = event.sender_id
-
-    if not eh_dono(user_id):
-        await event.reply("🚫 **Acesso negado!** Apenas o dono pode usar este comando.")
-        return
-
-    if divulgacao_ativa:
-        divulgacao_ativa = False
-        await event.reply("✅ **DIVULGAÇÃO AUTOMÁTICA DESATIVADA.**")
-    else:
-        await event.reply("⚠️ **A divulgação automática já está desativada.**")
-
-@bot.on(events.NewMessage(pattern=r'^/addchat (.+)'))
-async def adicionar_chat(event):
-    """Adiciona um chat à lista de divulgação"""
-    user_id = event.sender_id
-
-    if not eh_dono(user_id):
-        await event.reply("🚫 **Acesso negado!** Apenas o dono pode usar este comando.")
-        return
-
-    chat_input = event.pattern_match.group(1)
-
-    try:
-        # Tentar obter informações do chat
-        if chat_input.startswith('@'):
-            chat_entity = await bot.get_entity(chat_input)
-        elif chat_input.lstrip('-').isdigit():
-            chat_entity = await bot.get_entity(int(chat_input))
-        else:
-            await event.reply("❌ **Formato inválido!** Use `@username` ou `ID numérico`")
-            return
-
-        chat_id = chat_entity.id
-        chat_name = getattr(chat_entity, 'title', getattr(chat_entity, 'username', 'N/A'))
-
-        # Verificar se o bot é admin (apenas para grupos/canais)
-        if hasattr(chat_entity, 'broadcast') or hasattr(chat_entity, 'megagroup'):
-            if not await bot_eh_admin(chat_id):
-                await event.reply(f"⚠️ **Aviso:** O bot pode não ter permissão para enviar mensagens em **{chat_name}**")
-
-        if chat_id not in chats_autorizados:
-            chats_autorizados.append(chat_id)
-            await event.reply(
-                f"✅ **CHAT ADICIONADO COM SUCESSO!**\n\n"
-                f"📋 **Informações:**\n"
-                f"• Nome: {chat_name}\n"
-                f"• ID: `{chat_id}`\n"
-                f"• Total de chats: {len(chats_autorizados)}\n\n"
-                "💡 Use `/on` para ativar a divulgação."
-            )
-        else:
-            await event.reply(f"⚠️ **O chat {chat_name} já está na lista!**")
-
-    except Exception as e:
-        await event.reply(f"❌ **Erro ao adicionar chat:**\n`{str(e)[:100]}`")
-
-@bot.on(events.NewMessage(pattern=r'^/removechat (.+)'))
-async def remover_chat(event):
-    """Remove um chat da lista de divulgação"""
-    user_id = event.sender_id
-
-    if not eh_dono(user_id):
-        await event.reply("🚫 **Acesso negado!** Apenas o dono pode usar este comando.")
-        return
-
-    chat_input = event.pattern_match.group(1)
-
-    try:
-        if chat_input.startswith('@'):
-            chat_entity = await bot.get_entity(chat_input)
-            chat_id = chat_entity.id
-        elif chat_input.lstrip('-').isdigit():
-            chat_id = int(chat_input)
-        else:
-            await event.reply("❌ **Formato inválido!** Use `@username` ou `ID numérico`")
-            return
-
-        if chat_id in chats_autorizados:
-            chats_autorizados.remove(chat_id)
-            await event.reply(
-                f"✅ **CHAT REMOVIDO COM SUCESSO!**\n\n"
-                f"• ID removido: `{chat_id}`\n"
-                f"• Chats restantes: {len(chats_autorizados)}"
-            )
-        else:
-            await event.reply("❌ **Chat não encontrado na lista!**")
-
-    except Exception as e:
-        await event.reply(f"❌ **Erro ao remover chat:**\n`{str(e)[:100]}`")
-
-@bot.on(events.NewMessage(pattern=r'^/listchats$'))
-async def listar_chats(event):
-    """Lista todos os chats autorizados para divulgação"""
-    user_id = event.sender_id
-
-    if not eh_dono(user_id):
-        await event.reply("🚫 **Acesso negado!** Apenas o dono pode usar este comando.")
-        return
-
-    if not chats_autorizados:
-        await event.reply("📋 **Lista vazia!** Nenhum chat autorizado para divulgação.")
-        return
-
-    message = f"📋 **CHATS AUTORIZADOS ({len(chats_autorizados)}):**\n\n"
-
-    for i, chat_id in enumerate(chats_autorizados, 1):
-        try:
-            chat_info = await bot.get_entity(chat_id)
-            chat_name = getattr(chat_info, 'title', getattr(chat_info, 'username', 'N/A'))
-            message += f"{i}. **{chat_name}**\n   ID: `{chat_id}`\n\n"
-        except:
-            message += f"{i}. **Chat Desconhecido**\n   ID: `{chat_id}`\n\n"
-
-    message += f"🔄 **Status:** {'🟢 Ativo' if divulgacao_ativa else '🔴 Inativo'}\n"
-    message += f"⏰ **Intervalo:** 20 minutos"
-
-    await event.reply(message)
-
-@bot.on(events.NewMessage(pattern=r'^/divconfig$'))
-async def config_divulgacao(event):
-    """Mostra configurações do sistema de divulgação"""
-    user_id = event.sender_id
-
-    if not eh_dono(user_id):
-        await event.reply("🚫 **Acesso negado!** Apenas o dono pode usar este comando.")
-        return
-
-    await event.reply(
-        f"⚙️ **CONFIGURAÇÕES DE DIVULGAÇÃO**\n\n"
-        "━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
-        f"🔄 **Status:** {'🟢 Ativo' if divulgacao_ativa else '🔴 Inativo'}\n"
-        f"📊 **Chats autorizados:** {len(chats_autorizados)}\n"
-        f"⏰ **Intervalo:** 20 minutos\n"
-        f"👤 **Dono ID:** `{DONO_ID}`\n\n"
-        "━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
-        "🛠️ **COMANDOS DISPONÍVEIS:**\n"
-        "• `/on` - Ativar divulgação\n"
-        "• `/off` - Desativar divulgação\n"
-        "• `/addchat @canal` - Adicionar chat\n"
-        "• `/removechat @canal` - Remover chat\n"
-        "• `/listchats` - Listar chats\n"
-        "• `/testdiv` - Teste de divulgação\n\n"
-        "🤖 @DM1"
-    )
-
-@bot.on(events.NewMessage(pattern=r'^/testdiv$'))
-async def testar_divulgacao(event):
-    """Envia uma mensagem de teste para todos os chats"""
-    user_id = event.sender_id
-
-    if not eh_dono(user_id):
-        await event.reply("🚫 **Acesso negado!** Apenas o dono pode usar este comando.")
-        return
-
-    if not chats_autorizados:
-        await event.reply("❌ **Nenhum chat autorizado para teste!**")
-        return
-
-    await event.reply(f"🧪 **Iniciando teste em {len(chats_autorizados)} chats...**")
-
-    sucessos = 0
-    falhas = 0
-
-    mensagem_teste = f"🧪 **TESTE DE DIVULGAÇÃO - DM1 MULTI**\n\n✅ Sistema funcionando perfeitamente!\n🤖 @DM1"
-
-    for chat_id in chats_autorizados:
-        try:
-            await bot.send_message(chat_id, mensagem_teste, parse_mode='md')
-            sucessos += 1
-        except Exception as e:
-            falhas += 1
-            print(f"❌ Erro no teste para {chat_id}: {e}")
-
-    await event.reply(
-        f"📊 **RESULTADO DO TESTE:**\n\n"
-        f"✅ **Sucessos:** {sucessos}\n"
-        f"❌ **Falhas:** {falhas}\n"
-        f"📊 **Total:** {len(chats_autorizados)}\n\n"
-        f"🎯 **Taxa de sucesso:** {(sucessos/len(chats_autorizados)*100):.1f}%"
-    )
+# Todos os handlers de divulgação removidos - v6 limpo
 
 # Comandos de gerenciamento de autorização (apenas para o dono)
 @bot.on(events.NewMessage(pattern=r'^/autorizar (\d+)$'))
