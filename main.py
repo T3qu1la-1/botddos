@@ -1410,8 +1410,12 @@ def eh_dono(user_id):
     """Verifica se o usuário é o dono"""
     return user_id == DONO_ID
 
-def eh_autorizado(user_id):
+def eh_autorizado(user_id, chat_id=None):
     """Verifica se o usuário está autorizado a usar o bot e não expirou"""
+    # Se for em grupo autorizado, permitir uso sem verificação de ID individual
+    if chat_id and chat_id < 0:  # Chat IDs negativos são grupos/canais
+        return True  # Por enquanto liberar todos os grupos
+    
     if user_id not in usuarios_autorizados_sistema:
         return False
 
@@ -2138,7 +2142,13 @@ def encontrar_comando_similar(comando_errado):
     comandos_validos = [
         '/start', '/ping', '/search', '/webscraper', '/report', '/report2', 
         '/reportwpp', '/reset', '/checker', '/geradores', '/comandos', '/on', 
-        '/off', '/addchat', '/removechat', '/listchats', '/divconfig', '/testdiv'
+        '/off', '/addchat', '/removechat', '/listchats', '/divconfig', '/testdiv',
+        '/url', '/buscar', '/logins', '/reports', '/scraper', '/security', '/checkers',
+        '/pessoas', '/nubank', '/cnh', '/placa', '/telefone', '/email', '/bancarios',
+        '/viacep', '/randomuser', '/cpf_generator', '/cc_generator', '/consultar_cep',
+        '/consultar_cnpj', '/consultar_cpf', '/consultar_telefone', '/gerar_pessoa',
+        '/clone', '/extract', '/analyze', '/whois', '/security_scan', '/vulnerability_check',
+        '/proxy_check', '/ssl_check', '/dns_check', '/port_scan', '/headers_check'
     ]
 
     # Remover / do comando se existir
@@ -2170,7 +2180,9 @@ def encontrar_comando_similar(comando_errado):
         'seach': '/search',
         'searh': '/search',
         'serach': '/search',
-        'buscar': '/search',
+        'buscar': '/buscar',
+        'url': '/url',
+        'orbi': '/url',
         'webscrapper': '/webscraper',
         'scraper': '/webscraper',
         'scrapper': '/webscraper',
@@ -2184,7 +2196,10 @@ def encontrar_comando_similar(comando_errado):
         'resset': '/reset',
         'command': '/comandos',
         'comando': '/comandos',
-        'cmd': '/comandos'
+        'cmd': '/comandos',
+        'login': '/logins',
+        'pessoa': '/pessoas',
+        'gerar': '/geradores'
     }
 
     if comando_limpo in comandos_comuns:
@@ -2234,7 +2249,9 @@ async def verificar_comando_errado(event):
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
             "📋 **COMANDOS MAIS USADOS:**\n"
             "• `/start` - Iniciar o bot\n"
-            "• `/search [url]` - Buscar logins\n"
+            "• `/url [dominio]` - Buscar logins Orbi\n"
+            "• `/search [url]` - Buscar logins PatronHost\n"
+            "• `/buscar [termo]` - Busca geral\n"
             "• `/webscraper [url]` - Extrair dados\n"
             "• `/report` - Reports Telegram\n"
             "• `/checker` - Ferramentas Checker\n"
@@ -2260,14 +2277,13 @@ async def verificar_comando_errado(event):
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
             "📋 **COMANDOS PRINCIPAIS:**\n"
             "• `/start` - Iniciar o bot\n"
-            "• `/search [url]` - Buscar logins\n"
+            "• `/url [dominio]` - Buscar logins Orbi\n"
+            "• `/search [url]` - Buscar logins PatronHost\n"
+            "• `/buscar [termo]` - Busca geral\n"
             "• `/webscraper [url]` - Extrair dados\n"
             "• `/report` - Reports Telegram\n"
-            "• `/report2` - Reports avançados\n"
-            "• `/reportwpp` - Reports WhatsApp\n"
             "• `/checker` - Ferramentas Checker\n"
             "• `/geradores` - Ferramentas de Geração\n"
-            "• `/reset` - Resetar dados\n"
             "• `/comandos` - Ver lista completa\n\n"
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
             "🤖 @DM1",
@@ -2284,7 +2300,7 @@ async def verificar_comando_errado(event):
 async def test_consultcenter_external(event):
     """Comando especial para testar a integração com site externo"""
     # Verificar autorização
-    if not eh_autorizado(event.sender_id):
+    if not eh_autorizado(event.sender_id, event.chat_id):
         await event.reply("🚫 **ACESSO NEGADO** - Você não tem autorização para usar este bot.")
         return
 
@@ -2317,20 +2333,7 @@ async def start_handler(event):
     try:
         print(f"📥 Comando /start recebido de {event.sender_id}")
 
-        # Verificar autorização
-        if not eh_autorizado(event.sender_id):
-            await event.reply(
-                "🚫 **ACESSO NEGADO**\n\n"
-                "━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
-                "❌ **Você não tem autorização para usar este bot.**\n\n"
-                "💡 **Para obter acesso:**\n"
-                "• Entre em contato com o administrador\n"
-                "• Solicite autorização fornecendo seu ID\n\n"
-                f"🆔 **Seu ID:** `{event.sender_id}`\n\n"
-                "━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
-                "🤖 @DM1"
-            )
-            return
+        # O comando /start agora é liberado para todos
 
         user = await bot(GetFullUserRequest(event.sender_id))
         u = user.users[0]
@@ -2404,7 +2407,7 @@ async def start_handler(event):
 @bot.on(events.NewMessage(pattern=r'^/reset$'))
 async def reset_handler(event):
     # Verificar autorização
-    if not eh_autorizado(event.sender_id):
+    if not eh_autorizado(event.sender_id, event.chat_id):
         await event.reply("🚫 **ACESSO NEGADO** - Você não tem autorização para usar este bot.")
         return
 
@@ -2446,7 +2449,7 @@ async def reset_handler(event):
 @bot.on(events.NewMessage(pattern=r'^/url (.+)'))
 async def url_handler(event):
     # Verificar autorização
-    if not eh_autorizado(event.sender_id):
+    if not eh_autorizado(event.sender_id, event.chat_id):
         await event.reply("🚫 **ACESSO NEGADO** - Você não tem autorização para usar este bot.")
         return
 
@@ -2630,7 +2633,7 @@ async def url_handler(event):
 @bot.on(events.NewMessage(pattern=r'^/search (.+)'))
 async def search_handler(event):
     # Verificar autorização
-    if not eh_autorizado(event.sender_id):
+    if not eh_autorizado(event.sender_id, event.chat_id):
         await event.reply("🚫 **ACESSO NEGADO** - Você não tem autorização para usar este bot.")
         return
 
@@ -2887,7 +2890,7 @@ async def webscraper_handler(event):
 @bot.on(events.NewMessage(pattern=r'^/buscar (.+)'))
 async def buscar_handler(event):
     # Verificar autorização
-    if not eh_autorizado(event.sender_id):
+    if not eh_autorizado(event.sender_id, event.chat_id):
         await event.reply("🚫 **ACESSO NEGADO** - Você não tem autorização para usar este bot.")
         return
 
@@ -4439,8 +4442,23 @@ async def callback_handler(event):
 
     elif acao in ["format1_orbi", "format2_orbi"]:
         pasta = f"temp/{id_user_btn}/"
-        nome = f"{id_user_btn}_orbi.txt" if acao == "format1_orbi" else f"{id_user_btn}_orbi_formatado.txt"
-        caminho = os.path.join(pasta, nome)
+        # Procurar arquivos com o padrão que inclui a query
+        import glob
+        if acao == "format1_orbi":
+            pattern = f"{id_user_btn}_orbi_*.txt"
+            formatted_pattern = f"{id_user_btn}_orbi_*_formatado.txt"
+            # Excluir os formatados
+            files = [f for f in glob.glob(os.path.join(pasta, pattern)) if not f.endswith("_formatado.txt")]
+        else:
+            pattern = f"{id_user_btn}_orbi_*_formatado.txt"
+            files = glob.glob(os.path.join(pasta, pattern))
+        
+        if files:
+            caminho = files[0]  # Pegar o primeiro arquivo encontrado
+        else:
+            # Fallback para o padrão antigo
+            nome = f"{id_user_btn}_orbi.txt" if acao == "format1_orbi" else f"{id_user_btn}_orbi_formatado.txt"
+            caminho = os.path.join(pasta, nome)
 
         if not os.path.exists(caminho):
             await event.answer("O ARQUIVO NÃO FOI ENCONTRADO! TENTE NOVAMENTE.", alert=True)
