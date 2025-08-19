@@ -1,3 +1,27 @@
+#!/usr/bin/env python3
+"""
+DM1 Multi - Advanced Telegram Bot v6.0 CLEAN
+
+Sistema completo e organizado de ferramentas para Telegram com:
+- URL/Login Search (API Externa Premium)
+- Sistema de Reports Telegram/WhatsApp
+- Web Scraper avançado
+- Gerador de dados fake v2.0
+- Checker de sites e contas
+- Scanner de vulnerabilidades
+- Análise de API
+
+v6.0 Improvements:
+- Removed all promotional content and divulgation system
+- Removed invalid command handling
+- Clean and organized structure
+- Better error handling
+- Improved UI/UX
+
+Desenvolvido por: @Maygreit
+Canal: @DM1
+"""
+
 from telethon import TelegramClient, events, Button
 from telethon.tl.functions.users import GetFullUserRequest
 from telethon.utils import get_display_name
@@ -450,45 +474,7 @@ def carregar_usuarios_autorizados():
         print(f"❌ Erro ao carregar usuários autorizados: {e}")
         usuarios_autorizados_sistema = {DONO_ID}
 
-# Sistema de divulgação
-chats_autorizados = []
-divulgacao_ativa = False
-
-# Mensagem de divulgação
-texto_divulgacao = '''
-🌟 *DM1 MULTI* 🌟
-
-📌 *SERVIÇOS DISPONÍVEIS:*
-
-🔍 *BUSCA DE LOGINS*  
-   💵 Gratuito - Ilimitado
-
-🕷️ *WEB SCRAPER AVANÇADO*  
-   💵 Gratuito - Extração de dados
-
-📤 *REPORTS TELEGRAM*  
-   💵 Gratuito - Sistema básico e avançado
-
-📱 *REPORTS WHATSAPP*  
-   💵 Gratuito - Denúncias automáticas
-
-🛠️ *CHECKER TOOLS*  
-   💵 Gratuito - Verificação de sites
-
-👤 *GERADOR DE PESSOA FAKE v2.0*  
-   💵 Gratuito - Dados brasileiros reais
-
----
-
-⚡️ *Por que escolher o DM1 MULTI?*
-
-✅ *Totalmente gratuito 🆓*  
-✅ *Suporte 24/7 🛠*  
-✅ *Ferramentas avançadas 🚀*  
-✅ *Atualizações constantes 🔄*
-
-🔗 [Acesse nosso bot](https://t.me/DM1)
-'''
+# Sistema limpo - removido conteúdo promocional
 
 # Variáveis globais
 usuarios_bloqueados = set()
@@ -1633,37 +1619,7 @@ async def bot_eh_admin(chat_id):
         print(f"❌ Erro ao verificar admin: {e}")
         return False
 
-async def enviar_divulgacao():
-    """Envia mensagens de divulgação para todos os chats autorizados"""
-    global divulgacao_ativa
-
-    while divulgacao_ativa:
-        for chat_id in chats_autorizados:
-            try:
-                await bot.send_message(chat_id, texto_divulgacao, parse_mode='md')
-                print(f"✅ Mensagem enviada para o chat {chat_id}")
-
-                # Notificar o dono
-                try:
-                    chat_info = await bot.get_entity(chat_id)
-                    chat_name = getattr(chat_info, 'title', getattr(chat_info, 'username', str(chat_id)))
-                    await bot.send_message(DONO_ID, f"📤 **Divulgação enviada:**\n• Chat: {chat_name}\n• ID: {chat_id}")
-                except:
-                    pass
-
-            except Exception as e:
-                print(f"❌ Erro ao enviar para chat {chat_id}: {e}")
-
-                # Remover chat se der erro de permissão
-                if "forbidden" in str(e).lower() or "kicked" in str(e).lower():
-                    chats_autorizados.remove(chat_id)
-                    try:
-                        await bot.send_message(DONO_ID, f"⚠️ **Chat removido automaticamente:**\n• ID: {chat_id}\n• Motivo: {str(e)[:100]}")
-                    except:
-                        pass
-
-        # Aguardar 20 minutos (1200 segundos)
-        await asyncio.sleep(1200)
+# Sistema de divulgação removido - v6 limpo
 
 # Classes auxiliares
 class LoginSearch:
@@ -2322,162 +2278,9 @@ def calcular_similaridade(s1, s2):
     """Calcula a similaridade entre duas strings usando SequenceMatcher"""
     return SequenceMatcher(None, s1.lower(), s2.lower()).ratio()
 
-def encontrar_comando_similar(comando_errado):
-    """Encontra o comando mais similar ao digitado"""
-    comandos_validos = [
-        '/start', '/ping', '/search', '/webscraper', '/report', '/report2', 
-        '/reportwpp', '/reset', '/checker', '/geradores', '/comandos', '/on', 
-        '/off', '/addchat', '/removechat', '/listchats', '/divconfig', '/testdiv',
-        '/url', '/buscar', '/logins', '/reports', '/scraper', '/security', '/checkers',
-        '/pessoas', '/nubank', '/cnh', '/placa', '/telefone', '/email', '/bancarios',
-        '/viacep', '/randomuser', '/cpf_generator', '/cc_generator', '/consultar_cep',
-        '/consultar_cnpj', '/consultar_cpf', '/consultar_telefone', '/gerar_pessoa',
-        '/clone', '/extract', '/analyze', '/whois', '/security_scan', '/vulnerability_check',
-        '/proxy_check', '/ssl_check', '/dns_check', '/port_scan', '/headers_check'
-    ]
+# Sistema de comando inválido removido - v6 limpo
 
-    # Remover / do comando se existir
-    comando_limpo = comando_errado.lstrip('/').lower()
-
-    melhor_comando = None
-    melhor_similaridade = 0
-
-    # Primeiro, verificar correspondências exatas parciais
-    for comando in comandos_validos:
-        comando_sem_barra = comando.lstrip('/').lower()
-
-        # Verificar se o comando digitado está contido no comando válido
-        if comando_limpo in comando_sem_barra or comando_sem_barra in comando_limpo:
-            return comando, 1.0
-
-        # Calcular similaridade normal
-        similaridade = calcular_similaridade(comando_limpo, comando_sem_barra)
-
-        if similaridade > melhor_similaridade:
-            melhor_similaridade = similaridade
-            melhor_comando = comando
-
-    # Verificar comandos comuns com erros de digitação
-    comandos_comuns = {
-        'strat': '/start',
-        'star': '/start', 
-        'stat': '/start',
-        'seach': '/search',
-        'searh': '/search',
-        'serach': '/search',
-        'buscar': '/buscar',
-        'url': '/url',
-        'orbi': '/url',
-        'webscrapper': '/webscraper',
-        'scraper': '/webscraper',
-        'scrapper': '/webscraper',
-        'repot': '/report',
-        'reporte': '/report',
-        'reportt': '/report',
-        'check': '/checker',
-        'checher': '/checker',
-        'cheker': '/checker',
-        'res': '/reset',
-        'resset': '/reset',
-        'command': '/comandos',
-        'comando': '/comandos',
-        'cmd': '/comandos',
-        'login': '/logins',
-        'pessoa': '/pessoas',
-        'gerar': '/geradores'
-    }
-
-    if comando_limpo in comandos_comuns:
-        return comandos_comuns[comando_limpo], 0.9
-
-    # Só sugerir se a similaridade for maior que 0.3 (30%)
-    if melhor_similaridade > 0.3:
-        return melhor_comando, melhor_similaridade
-
-    return None, 0
-
-async def verificar_comando_errado(event):
-    """Verifica se uma mensagem é um comando inválido e sugere correção"""
-    texto = event.raw_text.strip()
-
-    # Verificar se parece com um comando (começa com /)
-    if not texto.startswith('/'):
-        return False
-
-    # Extrair apenas o comando (primeira palavra)
-    comando = texto.split()[0].lower()
-
-    # Lista de comandos válidos
-    comandos_validos = [
-        '/start', '/ping', '/search', '/webscraper', '/report', '/report2', 
-        '/reportwpp', '/reset', '/checker', '/geradores', '/comandos', '/on', 
-        '/off', '/addchat', '/removechat', '/listchats', '/divconfig', '/testdiv'
-    ]
-
-    # Se o comando é válido, não fazer nada
-    if comando in comandos_validos:
-        return False
-
-    # Procurar comando similar
-    comando_similar, similaridade = encontrar_comando_similar(comando)
-
-    if comando_similar and similaridade > 0.3:  # Diminuir threshold para mais sugestões
-        user_id = event.sender_id
-
-        # Mensagem de correção com sugestão
-        await event.reply(
-            f"❌ **COMANDO INVÁLIDO**\n\n"
-            "━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
-            f"🤖 **Comando digitado:** `{comando}`\n\n"
-            f"💡 **Você quis dizer:** `{comando_similar}`?\n"
-            f"📊 **Similaridade:** `{similaridade:.0%}`\n\n"
-            "━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
-            "📋 **COMANDOS MAIS USADOS:**\n"
-            "• `/start` - Iniciar o bot\n"
-            "• `/url [dominio]` - Buscar logins via API externa\n"
-            "• `/search [url]` - Buscar logins PatronHost\n"
-            "• `/buscar [termo]` - Busca geral\n"
-            "• `/webscraper [url]` - Extrair dados\n"
-            "• `/report` - Reports Telegram\n"
-            "• `/checker` - Ferramentas Checker\n"
-            "• `/geradores` - Ferramentas de Geração\n"
-            "• `/comandos` - Ver todos os comandos\n\n"
-            "━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
-            "🤖 @DM1",
-            buttons=[
-                [Button.inline(f"✅ Usar {comando_similar}", data=f"use_command:{comando_similar}:{user_id}")],
-                [Button.inline("📋 Áreas de Comando", data=f"show_commands:{user_id}")],
-                [Button.inline("🗑️ Fechar", data=f"apagarmensagem:{user_id}")]
-            ]
-        )
-        return True
-    else:
-        # Se não encontrou comando similar suficiente
-        user_id = event.sender_id
-        await event.reply(
-            f"❌ **COMANDO NÃO RECONHECIDO**\n\n"
-            "━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
-            f"🤖 **Comando digitado:** `{comando}`\n\n"
-            "❓ **Comando não encontrado.**\n\n"
-            "━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
-            "📋 **COMANDOS PRINCIPAIS:**\n"
-            "• `/start` - Iniciar o bot\n"
-            "• `/url [dominio]` - Buscar logins via API externa\n"
-            "• `/search [url]` - Buscar logins PatronHost\n"
-            "• `/buscar [termo]` - Busca geral\n"
-            "• `/webscraper [url]` - Extrair dados\n"
-            "• `/report` - Reports Telegram\n"
-            "• `/checker` - Ferramentas Checker\n"
-            "• `/geradores` - Ferramentas de Geração\n"
-            "• `/comandos` - Ver lista completa\n\n"
-            "━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
-            "🤖 @DM1",
-            buttons=[
-                [Button.inline("📋 Áreas de Comando", data=f"show_commands:{user_id}")],
-                [Button.inline("🗑️ Fechar", data=f"apagarmensagem:{user_id}")]
-            ]
-        )
-        return True
+# Função de verificação de comando inválido removida - v6 limpo
 
 # Handlers dos eventos
 # Comando especial para testar integração com site externo
@@ -3434,12 +3237,9 @@ async def report2_handler(event):
 async def message_handler(event):
     global report_data, whatsapp_report_data
 
-    # Verificar comando errado ANTES de processar outras coisas
+    # Ignorar comandos - deixar outros handlers processarem
     if event.raw_text.startswith('/'):
-        if await verificar_comando_errado(event):
-            return  # Se foi um comando errado corrigido, parar aqui
-        else:
-            return  # Se foi um comando válido, deixar outros handlers processarem
+        return  # Comandos são processados por outros handlers específicos
 
     # Ignorar mensagens vazias ou que não são texto
     if not event.raw_text:
@@ -4080,9 +3880,7 @@ async def message_handler(event):
         # Limpar estado
         globals()[f'consultcenter_state_{user_id}']['waiting_combos'] = False
 
-    # Sistema de correção de comandos - deve estar no final
-    elif await verificar_comando_errado(event):
-        return  # Comando foi corrigido, não processar mais nada
+    # Sistema de correção de comandos removido - v6 limpo
 
 @bot.on(events.CallbackQuery)
 async def callback_handler(event):
@@ -4139,9 +3937,9 @@ async def callback_handler(event):
             "🔍 `/buscar [termo]` - Buscar em base de dados\n"
             "   💡 Exemplo: `/buscar netflix`\n"
             "   📥 Formatos: user:pass e url:user:pass\n\n"
-            "🌌 `/url [serviço]` - Orbi Search Premium\n"
+            "🌌 `/url [serviço]` - URL Search via API Externa\n"
             "   💡 Exemplo: `/url Spotify`\n"
-            "   🚀 API melhorada com mais resultados\n\n"
+            "   🚀 API externa com resultados premium\n\n"
             "🔍 `/search [url]` - Buscar em sites específicos\n"
             "   💡 Exemplo: `/search facebook.com`\n"
             "   ⚡ Encontra credenciais em vazamentos\n\n"
@@ -4341,7 +4139,7 @@ async def callback_handler(event):
 
     elif acao == "quick_url":
         await safe_edit_message(event,
-            "🌌 **COMANDO /URL (ORBI SEARCH)**\n\n"
+            "🌌 **COMANDO /URL (URL SEARCH)**\n\n"
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
             "💡 **Como usar:**\n"
             "Digite `/url` seguido do serviço que deseja pesquisar\n\n"
@@ -4349,8 +4147,8 @@ async def callback_handler(event):
             "• `/url netflix`\n"
             "• `/url spotify`\n"
             "• `/url instagram`\n"
-            "• `/url pornhub`\n\n"
-            "🚀 **API Premium Orbi Space**\n"
+            "• `/url youtube`\n\n"
+            "🚀 **API Externa Premium**\n"
             "Resultados de alta qualidade\n\n"
             "🔧 **Diagnóstico:**\n"
             "• `/url diagnostico`\n\n"

@@ -1,6 +1,13 @@
-# Bot do Telegram em Python
+# DM1 Multi - Advanced Telegram Bot v6.0 CLEAN
 
-Um bot simples para Telegram com comandos básicos e sistema de mensagens automáticas.
+Sistema completo e organizado de ferramentas para Telegram com funcionalidades avançadas e interface limpa.
+
+## 🎯 V6.0 MAJOR IMPROVEMENTS
+- **PROMOTIONAL SYSTEM REMOVED** - All divulgacao/promotional features completely removed
+- **INVALID COMMAND HANDLING REMOVED** - Cleaner UX without annoying command suggestions  
+- **NEW URL SEARCH API** - Migrated from Orbi to external API (http://147.79.86.21:5019/search?term=)
+- **ORGANIZED STRUCTURE** - All functions, systems, and buttons comprehensively reorganized
+- **IMPROVED ERROR HANDLING** - Better error management throughout all systems
 
 ## 🚀 Funcionalidades
 
