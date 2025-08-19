@@ -23,8 +23,14 @@ Canal: @DM1
 """
 
 from telethon import TelegramClient, events, Button
-from telethon.tl.functions.users import GetFullUserRequest
-from telethon.utils import get_display_name
+# telethon imports - conditional import for better error handling
+try:
+    from telethon.tl.functions.users import GetFullUserRequest
+    from telethon.utils import get_display_name
+    from telethon import types
+except ImportError as e:
+    print(f"⚠️ Warning: Some telethon imports failed: {e}")
+    types = None
 try:
     from PIL import Image, ImageDraw, ImageFont, ImageFilter
 except ImportError:
@@ -428,6 +434,136 @@ bot = TelegramClient('bot', api_id, api_hash)
 
 # Sistema de autorização por ID
 usuarios_autorizados_sistema = {DONO_ID}  # Conjunto com IDs autorizados (dono sempre autorizado)
+
+# COMANDOS ADMINISTRATIVOS AVANÇADOS
+@bot.on(events.NewMessage(pattern=r'^/stats$'))
+async def stats_command(event):
+    """Mostra estatísticas detalhadas do bot"""
+    if not eh_dono(event.sender_id):
+        await event.reply("🚫 **Acesso negado!** Apenas o dono pode usar este comando.")
+        return
+    
+    uptime = int(time.time() - bot_start_time)
+    hours = uptime // 3600
+    mins = (uptime % 3600) // 60
+    
+    stats = (
+        f"📊 **ESTATÍSTICAS DETALHADAS**\n\n"
+        f"⏱️ **Uptime:** {hours}h {mins}m\n"
+        f"👥 **Usuários autorizados:** {len(usuarios_autorizados_sistema)}\n"
+        f"🔄 **Usuários bloqueados:** {len(usuarios_bloqueados)}\n"
+        f"📊 **Sessões ativas:** {len(usuarios_autorizados)}\n"
+        f"🎯 **Tasks canceladas:** {len(tasks_canceladas)}\n"
+        f"📥 **URLs em busca:** {len(urls_busca)}\n"
+        f"👑 **Admin ID:** `{DONO_ID}`\n"
+        f"🤖 **Bot:** @DM1"
+    )
+    
+    await event.reply(stats)
+
+@bot.on(events.NewMessage(pattern=r'^/listusers$'))
+async def list_users_command(event):
+    """Lista todos os usuários autorizados"""
+    if not eh_dono(event.sender_id):
+        await event.reply("🚫 **Acesso negado!** Apenas o dono pode usar este comando.")
+        return
+    
+    try:
+        cursor.execute("SELECT id, nome, sobrenome, admin, data_expiracao FROM usuarios ORDER BY id")
+        users = cursor.fetchall()
+        
+        if not users:
+            await event.reply("📝 **Nenhum usuário cadastrado no banco.**")
+            return
+        
+        user_list = "👥 **USUÁRIOS CADASTRADOS:**\n\n"
+        for i, user in enumerate(users[:20], 1):  # Limitar a 20
+            user_id, nome, sobrenome, admin, exp = user
+            nome_completo = f"{nome or ''} {sobrenome or ''}".strip() or "N/A"
+            status = "🟢 Admin" if admin == "yes" else "🔵 User"
+            if exp:
+                status += f" (exp: {exp[:10]})"
+            user_list += f"{i}. {nome_completo} (`{user_id}`)\n   {status}\n\n"
+        
+        if len(users) > 20:
+            user_list += f"... e mais {len(users) - 20} usuários\n\n"
+        
+        user_list += f"📊 **Total:** {len(users)} usuários"
+        await event.reply(user_list)
+        
+    except Exception as e:
+        await event.reply(f"❌ **Erro ao listar usuários:** {str(e)[:200]}")
+
+@bot.on(events.NewMessage(pattern=r'^/botinfo$'))
+async def botinfo_command(event):
+    """Informações técnicas do bot"""
+    if not eh_dono(event.sender_id):
+        await event.reply("🚫 **Acesso negado!** Apenas o dono pode usar este comando.")
+        return
+    
+    import sys
+    import platform
+    
+    info = (
+        f"🤖 **INFORMAÇÕES TÉCNICAS**\n\n"
+        f"🐍 **Python:** {platform.python_version()}\n"
+        f"💻 **Sistema:** {platform.system()} {platform.release()}\n"
+        f"📦 **Telethon:** Instalado\n"
+        f"🗃️ **SQLite:** Ativo\n"
+        f"📊 **Threads:** Múltiplas\n"
+        f"🔧 **Versão:** DM1 v6.0\n"
+        f"⏰ **Iniciado:** {time.strftime('%d/%m/%Y %H:%M:%S', time.localtime(bot_start_time))}\n"
+        f"💾 **Arquivos:** {len([f for f in os.listdir('.') if f.endswith('.py')])}) scripts Python"
+    )
+    
+    await event.reply(info)
+
+@bot.on(events.NewMessage(pattern=r'^/backup$'))
+async def backup_command(event):
+    """Cria backup do banco de dados"""
+    if not eh_dono(event.sender_id):
+        await event.reply("🚫 **Acesso negado!** Apenas o dono pode usar este comando.")
+        return
+    
+    try:
+        import shutil
+        backup_name = f"backup_users_{int(time.time())}.db"
+        shutil.copy2("database/users.db", f"database/{backup_name}")
+        
+        # Verificar tamanho do arquivo
+        size = os.path.getsize(f"database/{backup_name}")
+        
+        await event.reply(
+            f"💾 **BACKUP CRIADO!**\n\n"
+            f"📁 **Arquivo:** {backup_name}\n"
+            f"📊 **Tamanho:** {size} bytes\n"
+            f"📅 **Data:** {time.strftime('%d/%m/%Y %H:%M:%S')}\n\n"
+            f"✅ Backup salvo em database/{backup_name}"
+        )
+        
+    except Exception as e:
+        await event.reply(f"❌ **Erro ao criar backup:** {str(e)[:200]}")
+
+# Função auxiliar para criar botões do menu principal
+def create_main_menu_buttons(user_id):
+    """Cria botões do menu principal baseado no nível de acesso do usuário"""
+    buttons = [
+        [Button.inline("🔍 Logins", data=f"menu_logins:{user_id}"),
+         Button.inline("📤 Reports", data=f"menu_reports:{user_id}")],
+        [Button.inline("🎲 Geradores", data=f"menu_geradores:{user_id}"),
+         Button.inline("🕷️ Scraper", data=f"menu_scraper:{user_id}")],
+        [Button.inline("🔒 Security", data=f"menu_security:{user_id}"),
+         Button.inline("🔍 Checkers", data=f"menu_checkers:{user_id}")],
+        [Button.url("🔑 Adquirir APIs", "https://xpldata.com"),
+         Button.url("👤 Contatar Dono", "https://t.me/inatuavel")]
+    ]
+    
+    # Adicionar botão de painel admin apenas para o dono
+    if user_id == DONO_ID:
+        buttons.insert(3, [Button.inline("⚙️ Painel Admin", data=f"admin_panel:{user_id}")])
+        
+    buttons.append([Button.inline("🗑️ Fechar", data=f"apagarmensagem:{user_id}")])
+    return buttons
 
 # Função para carregar usuários autorizados do banco na inicialização
 def reconectar_banco():
@@ -1613,7 +1749,10 @@ async def bot_eh_admin(chat_id):
     """Verifica se o bot é admin no chat"""
     try:
         me = await bot.get_me()
-        participants = await bot.get_participants(chat_id, filter=types.ChannelParticipantsAdmins)
+        if types:
+            participants = await bot.get_participants(chat_id, filter=types.ChannelParticipantsAdmins)
+        else:
+            return False
         return any(admin.id == me.id for admin in participants)
     except Exception as e:
         print(f"❌ Erro ao verificar admin: {e}")
@@ -2371,19 +2510,23 @@ async def start_handler(event):
 
 💬 **ACESSE OS MENUS ABAIXO:**"""
 
-        await event.reply(
-            caption,
-            buttons=[
-                [Button.inline("🔍 Logins", data=f"menu_logins:{user_id}"),
-                 Button.inline("📤 Reports", data=f"menu_reports:{user_id}")],
-                [Button.inline("🎲 Geradores", data=f"menu_geradores:{user_id}"),
-                 Button.inline("🕷️ Scraper", data=f"menu_scraper:{user_id}")],
-                [Button.inline("🔒 Security", data=f"menu_security:{user_id}"),
-                 Button.inline("🔍 Checkers", data=f"menu_checkers:{user_id}")],
-                [Button.url("🔑 Adquirir APIs", "https://xpldata.com"),
-                 Button.url("👤 Contatar Dono", "https://t.me/inatuavel")]
-            ]
-        )
+        # Botões dinâmicos baseados no nível de acesso
+        buttons = [
+            [Button.inline("🔍 Logins", data=f"menu_logins:{user_id}"),
+             Button.inline("📤 Reports", data=f"menu_reports:{user_id}")],
+            [Button.inline("🎲 Geradores", data=f"menu_geradores:{user_id}"),
+             Button.inline("🕷️ Scraper", data=f"menu_scraper:{user_id}")],
+            [Button.inline("🔒 Security", data=f"menu_security:{user_id}"),
+             Button.inline("🔍 Checkers", data=f"menu_checkers:{user_id}")],
+            [Button.url("🔑 Adquirir APIs", "https://xpldata.com"),
+             Button.url("👤 Contatar Dono", "https://t.me/inatuavel")]
+        ]
+        
+        # Adicionar botão de painel admin apenas para o dono
+        if user_id == DONO_ID:
+            buttons.insert(3, [Button.inline("⚙️ Painel Admin", data=f"admin_panel:{user_id}")])
+        
+        await event.reply(caption, buttons=buttons)
         print(f"✅ Resposta /start enviada para {user_id}")
 
     except Exception as e:
@@ -4104,17 +4247,7 @@ async def callback_handler(event):
             "⚠️ **Use com responsabilidade!**\n\n"
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
             "💬 **ACESSE OS MENUS ABAIXO:**",
-            buttons=[
-                [Button.inline("🔍 Logins", data=f"menu_logins:{id_user_btn}"),
-                 Button.inline("📤 Reports", data=f"menu_reports:{id_user_btn}")],
-                [Button.inline("🎲 Geradores", data=f"menu_geradores:{id_user_btn}"),
-                 Button.inline("🕷️ Scraper", data=f"menu_scraper:{id_user_btn}")],
-                [Button.inline("🔒 Security", data=f"menu_security:{id_user_btn}"),
-                 Button.inline("🔍 Checkers", data=f"menu_checkers:{id_user_btn}")],
-                [Button.url("🔑 Adquirir APIs", "https://xpldata.com"),
-                 Button.url("👤 Contatar Dono", "https://t.me/inatuavel")],
-                [Button.inline("🗑️ Fechar", data=f"apagarmensagem:{id_user_btn}")]
-            ]
+            buttons=create_main_menu_buttons(id_user_btn)
         )
 
     # NOVOS HANDLERS PARA AÇÕES RÁPIDAS DOS MENUS
@@ -5617,6 +5750,160 @@ async def callback_handler(event):
         await safe_edit_message(event, "Para usar o comando /checker, basta digitar /checker e usar as ferramentas.",
                  buttons=[[Button.inline("🗑️ Fechar", data=f"apagarmensagem:{id_user_btn}")]]
              )
+
+    # PAINEL ADMINISTRATIVO
+    elif acao == "admin_panel":
+        if id_user_btn != DONO_ID:
+            await event.answer("🚫 Acesso negado!", alert=True)
+            return
+            
+        await safe_edit_message(event,
+            "⚙️ **PAINEL ADMINISTRATIVO DM1** ⚙️\n\n"
+            "━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+            "🛠️ **GERENCIAMENTO DE USUÁRIOS:**\n"
+            "• `/autorizar [ID]` - Autorizar usuário\n"
+            "• `/desautorizar [ID]` - Remover autorização\n"
+            "• `/autotemp [ID] [tempo]` - Autorização temporária\n"
+            "• `/listusers` - Lista usuários autorizados\n\n"
+            "📊 **ESTATÍSTICAS E SISTEMA:**\n"
+            "• `/stats` - Estatísticas do bot\n"
+            "• `/broadcast` - Enviar mensagem para todos\n"
+            "• `/logs` - Visualizar logs do sistema\n"
+            "• `/backup` - Backup do banco de dados\n\n"
+            "🔧 **FERRAMENTAS AVANÇADAS:**\n"
+            "• `/execsql [query]` - Executar SQL no banco\n"
+            "• `/botinfo` - Informações técnicas\n"
+            "• `/restart` - Reiniciar bot\n\n"
+            f"📈 **STATUS ATUAL:**\n"
+            f"• Usuários autorizados: {len(usuarios_autorizados_sistema)}\n"
+            f"• Uptime: {time.time() - bot_start_time:.0f}s\n"
+            f"• ID do Admin: `{DONO_ID}`\n\n"
+            "━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+            "🤖 @DM1",
+            buttons=[
+                [Button.inline("👥 Gerenciar Usuários", data=f"admin_users:{id_user_btn}"),
+                 Button.inline("📊 Estatísticas", data=f"admin_stats:{id_user_btn}")],
+                [Button.inline("🔧 Ferramentas", data=f"admin_tools:{id_user_btn}"),
+                 Button.inline("💾 Backup", data=f"admin_backup:{id_user_btn}")],
+                [Button.inline("🔙 Voltar", data=f"back_to_start:{id_user_btn}")],
+                [Button.inline("🗑️ Fechar", data=f"apagarmensagem:{id_user_btn}")]
+            ]
+        )
+
+    elif acao == "admin_stats":
+        if id_user_btn != DONO_ID:
+            await event.answer("🚫 Acesso negado!", alert=True)
+            return
+            
+        uptime_seconds = int(time.time() - bot_start_time)
+        uptime_hours = uptime_seconds // 3600
+        uptime_mins = (uptime_seconds % 3600) // 60
+        
+        stats_text = (
+            "📊 **ESTATÍSTICAS DO BOT**\n\n"
+            "━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+            f"⏱️ **Uptime:** {uptime_hours}h {uptime_mins}m\n"
+            f"👥 **Usuários autorizados:** {len(usuarios_autorizados_sistema)}\n"
+            f"🔄 **Usuários bloqueados:** {len(usuarios_bloqueados)}\n"
+            f"📊 **Sessões ativas:** {len(usuarios_autorizados)}\n"
+            f"🎯 **Tasks canceladas:** {len(tasks_canceladas)}\n"
+            f"🤖 **ID do Bot:** @DM1\n"
+            f"👑 **Admin ID:** `{DONO_ID}`\n\n"
+            "━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+            "🤖 @DM1"
+        )
+        
+        await safe_edit_message(event, stats_text,
+            buttons=[
+                [Button.inline("🔙 Voltar ao Painel", data=f"admin_panel:{id_user_btn}")],
+                [Button.inline("🗑️ Fechar", data=f"apagarmensagem:{id_user_btn}")]
+            ]
+        )
+
+    elif acao == "admin_users":
+        if id_user_btn != DONO_ID:
+            await event.answer("🚫 Acesso negado!", alert=True)
+            return
+            
+        # Buscar usuários do banco
+        try:
+            cursor.execute("SELECT id, nome, sobrenome, admin, data_expiracao FROM usuarios ORDER BY id")
+            users = cursor.fetchall()
+            
+            user_list = "👥 **USUÁRIOS CADASTRADOS:**\n\n"
+            for user in users[:10]:  # Mostrar apenas 10 primeiros
+                user_id, nome, sobrenome, admin, expiracao = user
+                nome_completo = f"{nome or ''} {sobrenome or ''}".strip() or "N/A"
+                status = "🟢 Admin" if admin == "yes" else "🔵 User"
+                if expiracao:
+                    status += f" (exp: {expiracao[:10]})"
+                user_list += f"• {nome_completo} (`{user_id}`)\n  {status}\n\n"
+            
+            if len(users) > 10:
+                user_list += f"... e mais {len(users) - 10} usuários\n\n"
+                
+            user_list += f"📊 **Total:** {len(users)} usuários"
+            
+        except Exception as e:
+            user_list = f"❌ Erro ao carregar usuários: {str(e)[:100]}"
+            
+        await safe_edit_message(event, user_list,
+            buttons=[
+                [Button.inline("🔙 Voltar ao Painel", data=f"admin_panel:{id_user_btn}")],
+                [Button.inline("🗑️ Fechar", data=f"apagarmensagem:{id_user_btn}")]
+            ]
+        )
+
+    elif acao == "admin_tools":
+        if id_user_btn != DONO_ID:
+            await event.answer("🚫 Acesso negado!", alert=True)
+            return
+            
+        await safe_edit_message(event,
+            "🔧 **FERRAMENTAS ADMINISTRATIVAS**\n\n"
+            "━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+            "⚡ **COMANDOS DISPONÍVEIS:**\n\n"
+            "🔍 `/execsql SELECT * FROM usuarios LIMIT 10`\n"
+            "   - Executar consulta SQL\n\n"
+            "📊 `/botinfo`\n"
+            "   - Informações técnicas detalhadas\n\n"
+            "📢 `/broadcast Sua mensagem aqui`\n"
+            "   - Enviar para todos os usuários\n\n"
+            "🔄 `/restart`\n"
+            "   - Reiniciar o bot\n\n"
+            "📋 `/logs`\n"
+            "   - Ver logs do sistema\n\n"
+            "━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+            "⚠️ Use com cuidado!",
+            buttons=[
+                [Button.inline("🔙 Voltar ao Painel", data=f"admin_panel:{id_user_btn}")],
+                [Button.inline("🗑️ Fechar", data=f"apagarmensagem:{id_user_btn}")]
+            ]
+        )
+
+    elif acao == "admin_backup":
+        if id_user_btn != DONO_ID:
+            await event.answer("🚫 Acesso negado!", alert=True)
+            return
+            
+        await safe_edit_message(event,
+            "💾 **SISTEMA DE BACKUP**\n\n"
+            "━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+            "📊 **Estado atual do banco:**\n\n"
+            f"📁 **Arquivo:** users.db\n"
+            f"👥 **Usuários:** {len(usuarios_autorizados_sistema)}\n"
+            f"🔄 **Sessões:** {len(usuarios_autorizados)}\n\n"
+            "💡 **Para fazer backup:**\n"
+            "Use o comando `/backup` no chat\n\n"
+            "🔧 **Restaurar backup:**\n"
+            "Entre em contato com o desenvolvedor\n\n"
+            "━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+            "⚠️ Backups são importantes para segurança!",
+            buttons=[
+                [Button.inline("🔙 Voltar ao Painel", data=f"admin_panel:{id_user_btn}")],
+                [Button.inline("🗑️ Fechar", data=f"apagarmensagem:{id_user_btn}")]
+            ]
+        )
 
     elif acao == "cmd_geradores":
         await safe_edit_message(event,
