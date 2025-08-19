@@ -43,8 +43,8 @@ def disparar_requisicoes():
                 with lock:
                     contador += 3
                     print(f"Enviando req para {alvo}", end="\r")
-            except:
-                pass
+            except Exception as e:
+                print(f"Erro na requisição: {e}")
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [
