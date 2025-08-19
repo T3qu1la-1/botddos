@@ -1,0 +1,101 @@
+import requests
+import io
+from telethon import TelegramClient, events, Button
+
+# ==== CONFIGURAÇÕES ====
+api_id = 123456      # <- coloque o seu aqui
+api_hash = "abcd1234efgh5678ijkl9012mnopqrst"  # <- coloque o seu aqui
+bot_token = "123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11"  # <- coloque o token do bot aqui
+
+# cliente
+bot = TelegramClient('bot_session', api_id, api_hash).start(bot_token=bot_token)
+
+# cache de resultados por usuário
+cache_resultados = {}
+
+# ======== HANDLER DO COMANDO ========
+@bot.on(events.NewMessage(pattern=r'^/buscar (.+)'))
+async def handler_buscar(event):
+    termo = event.pattern_match.group(1)
+    url = f"http://147.79.86.21:5019/search?term={termo}"
+
+    try:
+        resposta = requests.get(url, timeout=10)
+        if resposta.status_code != 200:
+            await event.reply(f"Erro HTTP {resposta.status_code}")
+            return
+
+        dados = resposta.json()
+        if "results" not in dados or not dados["results"]:
+            await event.reply("Nenhum resultado encontrado.")
+            return
+
+        cache_resultados[event.sender_id] = {"termo": termo, "dados": dados["results"]}
+        total = len(dados["results"])
+
+        await event.respond(
+            f"🔎 Encontrei **{total} resultados** para '{termo}'.\n"
+            f"Escolha o formato do arquivo:",
+            parse_mode="md",
+            buttons=[
+                [
+                    Button.inline("🌐 url:user:pass", data=b"url_user_pass"),
+                    Button.inline("🔑 user:pass", data=b"user_pass"),
+                ]
+            ]
+        )
+
+    except Exception as e:
+        await event.reply(f"Ocorreu um erro: {e}")
+
+
+# ======== CALLBACK DOS BOTÕES ========
+@bot.on(events.CallbackQuery)
+async def callback_handler(event):
+    user_id = event.sender_id
+    cache_info = cache_resultados.get(user_id)
+
+    if not cache_info:
+        await event.answer("❌ Pesquisa expirada. Use /buscar de novo.", alert=True)
+        return
+
+    termo = cache_info["termo"]
+    resultados = cache_info["dados"]
+
+    if event.data == b"user_pass":
+        # Formato user:pass
+        linhas = []
+        for item in resultados:
+            user = item.get("user", "").replace("Password", "").strip()
+            senha = item.get("pass", "").strip()
+            if user and senha:
+                linhas.append(f"{user}:{senha}")
+        conteudo = "\n".join(linhas)
+
+        arquivo = io.BytesIO(conteudo.encode("utf-8"))
+        arquivo.name = f"userpass_{termo}.txt"
+
+        await bot.send_file(event.chat_id, arquivo, caption="🔑 Arquivo no formato user:pass")
+        await event.answer("✅ Arquivo user:pass gerado!")
+
+    elif event.data == b"url_user_pass":
+        # Formato url | user | pass
+        linhas = []
+        for item in resultados:
+            user = item.get("user", "").replace("Password", "").strip()
+            senha = item.get("pass", "").strip()
+            url_item = item.get("url", "").strip()
+            if user and senha:
+                linhas.append(f"{url_item} | {user} | {senha}")
+        conteudo = "\n".join(linhas)
+
+        arquivo = io.BytesIO(conteudo.encode("utf-8"))
+        arquivo.name = f"url_user_pass_{termo}.txt"
+
+        await bot.send_file(event.chat_id, arquivo, caption="🌐 Arquivo no formato url:user:pass")
+        await event.answer("✅ Arquivo url:user:pass gerado!")
+
+
+# ======== START ========
+print("🤖 Bot rodando com Telethon...")
+bot.run_until_disconnected()
