@@ -335,8 +335,6 @@ async def enviar_mensagem_inicial(app):
                 print(f"Erro ao enviar mensagem para {user_id}: {e}")
 
 if __name__ == "__main__":
-    import asyncio
-    
     app = ApplicationBuilder().token(TOKEN).build()
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CallbackQueryHandler(botao_callback))
@@ -351,13 +349,48 @@ if __name__ == "__main__":
     
     print("Bot iniciado...")
     
-    # Função para inicializar o bot e enviar mensagens
-    async def main_async():
-        await app.initialize()
-        await enviar_mensagem_inicial(app)
-        await app.start()
-        print("Bot executando...")
-        await app.run_polling()
+    # Envia mensagem inicial para usuários cadastrados
+    async def enviar_inicial():
+        if "users" in db:
+            users = db["users"]
+            for user_id in users:
+                try:
+                    await app.bot.send_message(
+                        chat_id=user_id,
+                        text="🟢 Bot está ONLINE e pronto para uso!"
+                    )
+                except Exception as e:
+                    print(f"Erro ao enviar mensagem para {user_id}: {e}")
     
-    # Executa o bot
-    asyncio.run(main_async())
+    # Executa o envio inicial em background
+    import threading
+    def thread_inicial():
+        import asyncio
+        try:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            # Aguarda um pouco para o bot inicializar
+            import time
+            time.sleep(2)
+            # Então tenta enviar as mensagens
+            if "users" in db:
+                users = db["users"]
+                for user_id in users:
+                    try:
+                        import requests
+                        url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
+                        data = {
+                            "chat_id": user_id,
+                            "text": "🟢 Bot está ONLINE e pronto para uso!"
+                        }
+                        requests.post(url, data=data)
+                    except:
+                        pass
+        except:
+            pass
+    
+    # Inicia thread em background
+    threading.Thread(target=thread_inicial, daemon=True).start()
+    
+    print("Bot executando...")
+    app.run_polling()
