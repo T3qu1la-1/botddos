@@ -91,6 +91,7 @@ def disparar_requisicoes():
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
+    user_name = update.effective_user.first_name
     
     # Salva o user_id na base de dados
     if "users" not in db:
@@ -102,11 +103,27 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         db["users"] = users
     
     keyboard = [
-        [InlineKeyboardButton("Iniciar ataque", callback_data="iniciar")],
-        [InlineKeyboardButton("Cancelar ataque", callback_data="cancelar")]
+        [InlineKeyboardButton("🚀 Iniciar Ataque", callback_data="iniciar")],
+        [InlineKeyboardButton("❌ Cancelar Ataque", callback_data="cancelar")]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
-    await update.message.reply_text("Escolha uma ação:", reply_markup=reply_markup)
+    
+    mensagem = f"""
+🔥 **Bem-vindo ao Bot de Stress Test, {user_name}!** 🔥
+
+⚡ **Comandos disponíveis:**
+• `/start` - Menu principal
+• `/info <url>` - Verifica status de um site
+• `/ip` - Mostra seu IP atual
+• `/trocarip` - Troca IP via Mullvad
+• `/online` - Envia mensagem para todos usuários
+• `/source` - Obtém arquivos do bot
+• `/parar` - Para ataque ativo
+
+🎯 **Escolha uma ação abaixo:**
+    """
+    
+    await update.message.reply_text(mensagem, reply_markup=reply_markup, parse_mode='Markdown')
 
 async def botao_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     global ataque_ativo
@@ -164,10 +181,12 @@ async def trocar_ip(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def info_bot(update: Update, context: ContextTypes.DEFAULT_TYPE):
     bot_info = await context.bot.get_me()
     await update.message.reply_text(
-        f"Informações do Bot:\n"
-        f"Nome: {bot_info.first_name}\n"
-        f"Username: @{bot_info.username}\n"
-        f"ID: {bot_info.id}"
+        f"🤖 **Informações do Bot:**\n\n"
+        f"📛 **Nome:** {bot_info.first_name}\n"
+        f"👤 **Username:** @{bot_info.username}\n"
+        f"🆔 **ID:** {bot_info.id}\n\n"
+        f"💡 **Dica:** Use `/info <url>` para verificar status de sites",
+        parse_mode='Markdown'
     )
 
 async def enviar_online_para_todos(context: ContextTypes.DEFAULT_TYPE):
@@ -185,6 +204,123 @@ async def enviar_online_para_todos(context: ContextTypes.DEFAULT_TYPE):
 async def online(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await enviar_online_para_todos(context)
     await update.message.reply_text("Mensagem de online enviada para todos os usuários!")
+
+async def verificar_site(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if not context.args:
+        await update.message.reply_text("❌ **Uso:** `/info <url>`\n\n**Exemplo:** `/info https://example.com`", parse_mode='Markdown')
+        return
+    
+    url = context.args[0]
+    if not url.startswith(('http://', 'https://')):
+        url = 'https://' + url
+    
+    await update.message.reply_text(f"🔍 Verificando status de: `{url}`...", parse_mode='Markdown')
+    
+    try:
+        start_time = time.time()
+        response = requests.get(url, timeout=10, headers=gerar_headers())
+        end_time = time.time()
+        
+        tempo_resposta = round((end_time - start_time) * 1000, 2)
+        
+        if response.status_code == 200:
+            status_emoji = "🟢"
+            status_text = "ONLINE"
+        elif response.status_code >= 500:
+            status_emoji = "🔴"
+            status_text = "ERRO DO SERVIDOR"
+        elif response.status_code >= 400:
+            status_emoji = "🟡"
+            status_text = "ERRO DO CLIENTE"
+        else:
+            status_emoji = "🔵"
+            status_text = "RESPOSTA INCOMUM"
+        
+        mensagem = f"""
+{status_emoji} **Status do Site**
+
+🌐 **URL:** `{url}`
+📊 **Status:** {status_text}
+🔢 **Código:** {response.status_code}
+⏱️ **Tempo:** {tempo_resposta}ms
+📏 **Tamanho:** {len(response.content)} bytes
+        """
+        
+    except requests.exceptions.Timeout:
+        mensagem = f"""
+🔴 **Site FORA DO AR ou LENTO**
+
+🌐 **URL:** `{url}`
+❌ **Erro:** Timeout (>10s)
+💡 **Possível causa:** Site sobrecarregado ou offline
+        """
+        
+    except requests.exceptions.ConnectionError:
+        mensagem = f"""
+🔴 **Site INACESSÍVEL**
+
+🌐 **URL:** `{url}`
+❌ **Erro:** Conexão recusada
+💡 **Possível causa:** Site completamente offline
+        """
+        
+    except Exception as e:
+        mensagem = f"""
+🔴 **Erro na Verificação**
+
+🌐 **URL:** `{url}`
+❌ **Erro:** {str(e)}
+        """
+    
+    await update.message.reply_text(mensagem, parse_mode='Markdown')
+
+async def enviar_source(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("📁 **Enviando arquivos do bot...**", parse_mode='Markdown')
+    
+    # Lê e envia bot.py
+    try:
+        with open('bot.py', 'r', encoding='utf-8') as f:
+            bot_content = f.read()
+        await update.message.reply_document(
+            document=bot_content.encode('utf-8'),
+            filename='bot.py',
+            caption='📄 **bot.py** - Versão básica do bot'
+        )
+    except Exception as e:
+        await update.message.reply_text(f"❌ Erro ao enviar bot.py: {e}")
+    
+    # Lê e envia main.py sem token
+    try:
+        with open('main.py', 'r', encoding='utf-8') as f:
+            main_content = f.read()
+        
+        # Remove o token
+        main_content = main_content.replace(
+            'TOKEN = "8061748013:AAHpn45TB5Z2QbkVC6o-WhqjyXg2R7-BRt8"',
+            'TOKEN = "SEU_TOKEN_AQUI"'
+        )
+        
+        await update.message.reply_document(
+            document=main_content.encode('utf-8'),
+            filename='main.py',
+            caption='📄 **main.py** - Arquivo principal (sem token)'
+        )
+    except Exception as e:
+        await update.message.reply_text(f"❌ Erro ao enviar main.py: {e}")
+    
+    # Lê e envia requirements.txt
+    try:
+        with open('requirements.txt', 'r', encoding='utf-8') as f:
+            req_content = f.read()
+        await update.message.reply_document(
+            document=req_content.encode('utf-8'),
+            filename='requirements.txt',
+            caption='📄 **requirements.txt** - Dependências do projeto'
+        )
+    except Exception as e:
+        await update.message.reply_text(f"❌ Erro ao enviar requirements.txt: {e}")
+    
+    await update.message.reply_text("✅ **Todos os arquivos foram enviados!**", parse_mode='Markdown')
 
 async def enviar_mensagem_inicial(app):
     if "users" in db:
@@ -208,8 +344,10 @@ if __name__ == "__main__":
     app.add_handler(CommandHandler("parar", parar))
     app.add_handler(CommandHandler("ip", verificar_ip))
     app.add_handler(CommandHandler("trocarip", trocar_ip))
-    app.add_handler(CommandHandler("info", info_bot))
+    app.add_handler(CommandHandler("info", verificar_site))
     app.add_handler(CommandHandler("online", online))
+    app.add_handler(CommandHandler("source", enviar_source))
+    app.add_handler(CommandHandler("botinfo", info_bot))
     
     print("Bot iniciado...")
     
