@@ -353,13 +353,11 @@ if __name__ == "__main__":
     
     # Função para inicializar o bot e enviar mensagens
     async def main_async():
-        async with app:
-            await app.initialize()
-            await enviar_mensagem_inicial(app)
-            await app.start()
-            await app.updater.start_polling()
-            print("Bot executando...")
-            await app.updater.idle()
+        await app.initialize()
+        await enviar_mensagem_inicial(app)
+        await app.start()
+        print("Bot executando...")
+        await app.run_polling()
     
     # Executa o bot
     asyncio.run(main_async())
