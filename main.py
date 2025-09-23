@@ -6,6 +6,7 @@ import subprocess
 import time
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, CallbackQueryHandler, MessageHandler, ContextTypes, filters
+from replit import db
 
 TOKEN = "8061748013:AAHpn45TB5Z2QbkVC6o-WhqjyXg2R7-BRt8"
 
@@ -89,6 +90,17 @@ def disparar_requisicoes():
                 print(f"Erro na requisição: {e}")
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.effective_user.id
+    
+    # Salva o user_id na base de dados
+    if "users" not in db:
+        db["users"] = []
+    
+    users = db["users"]
+    if user_id not in users:
+        users.append(user_id)
+        db["users"] = users
+    
     keyboard = [
         [InlineKeyboardButton("Iniciar ataque", callback_data="iniciar")],
         [InlineKeyboardButton("Cancelar ataque", callback_data="cancelar")]
@@ -158,6 +170,22 @@ async def info_bot(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"ID: {bot_info.id}"
     )
 
+async def enviar_online_para_todos(context: ContextTypes.DEFAULT_TYPE):
+    if "users" in db:
+        users = db["users"]
+        for user_id in users:
+            try:
+                await context.bot.send_message(
+                    chat_id=user_id,
+                    text="🟢 Bot está ONLINE e pronto para uso!"
+                )
+            except Exception as e:
+                print(f"Erro ao enviar mensagem para {user_id}: {e}")
+
+async def online(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await enviar_online_para_todos(context)
+    await update.message.reply_text("Mensagem de online enviada para todos os usuários!")
+
 if __name__ == "__main__":
     app = ApplicationBuilder().token(TOKEN).build()
     app.add_handler(CommandHandler("start", start))
@@ -167,6 +195,30 @@ if __name__ == "__main__":
     app.add_handler(CommandHandler("ip", verificar_ip))
     app.add_handler(CommandHandler("trocarip", trocar_ip))
     app.add_handler(CommandHandler("info", info_bot))
+    app.add_handler(CommandHandler("online", online))
     
     print("Bot iniciado...")
-    app.run_polling()
+    
+    # Envia mensagem de online para todos os usuários quando o bot inicia
+    async def enviar_mensagem_inicial():
+        if "users" in db:
+            users = db["users"]
+            for user_id in users:
+                try:
+                    await app.bot.send_message(
+                        chat_id=user_id,
+                        text="🟢 Bot está ONLINE e pronto para uso!"
+                    )
+                except Exception as e:
+                    print(f"Erro ao enviar mensagem para {user_id}: {e}")
+    
+    # Executa o envio da mensagem inicial em thread separada
+    import asyncio
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    
+    async def iniciar_bot():
+        await enviar_mensagem_inicial()
+        app.run_polling()
+    
+    loop.run_until_complete(iniciar_bot())
