@@ -149,6 +149,15 @@ async def trocar_ip(update: Update, context: ContextTypes.DEFAULT_TYPE):
     else:
         await update.message.reply_text("Erro ao trocar IP. Verifique se o Mullvad está configurado.")
 
+async def info_bot(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    bot_info = await context.bot.get_me()
+    await update.message.reply_text(
+        f"Informações do Bot:\n"
+        f"Nome: {bot_info.first_name}\n"
+        f"Username: @{bot_info.username}\n"
+        f"ID: {bot_info.id}"
+    )
+
 if __name__ == "__main__":
     app = ApplicationBuilder().token(TOKEN).build()
     app.add_handler(CommandHandler("start", start))
@@ -157,6 +166,7 @@ if __name__ == "__main__":
     app.add_handler(CommandHandler("parar", parar))
     app.add_handler(CommandHandler("ip", verificar_ip))
     app.add_handler(CommandHandler("trocarip", trocar_ip))
+    app.add_handler(CommandHandler("info", info_bot))
     
     print("Bot iniciado...")
     app.run_polling()
