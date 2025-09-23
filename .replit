@@ -5,7 +5,7 @@ channel = "stable-25_05"
 packages = ["freetype", "lcms2", "libimagequant", "libjpeg", "libtiff", "libwebp", "libxcrypt", "openjpeg", "openssl", "tcl", "tk", "zlib"]
 
 [workflows]
-runButton = "Bot Telegram"
+runButton = "Run Bot"
 
 [[workflows.workflow]]
 name = "Project"
@@ -35,6 +35,15 @@ mode = "sequential"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "python main.py"
+
+[[workflows.workflow]]
+name = "Run Bot"
+author = 47894801
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "pip install -r requirements.txt && python main.py"
 
 [agent]
 expertMode = true
