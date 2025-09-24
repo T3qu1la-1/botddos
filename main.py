@@ -16,7 +16,7 @@ threads = []
 lock = threading.Lock()
 contador = 0
 
-rotas = ["/", "/login", "/admin", "/search", "/panel", "/api", "/dashboard", "/wp-admin", "/phpmyadmin", "/cpanel", "/config", "/backup", "/db", "/mysql", "/sql", "/users", "/upload", "/download", "/files", "/media", "/images", "/css", "/js", "/assets", "/public", "/private", "/secure", "/protected", "/system", "/core", "/lib", "/includes", "/modules", "/plugins", "/themes", "/templates", "/cache", "/tmp", "/logs", "/error", "/debug", "/test", "/dev", "/staging", "/beta"]
+rotas = ["/", "/login", "/admin", "/search", "/panel", "/api", "/dashboard", "/wp-admin", "/phpmyadmin", "/cpanel", "/config", "/backup", "/db", "/mysql", "/sql", "/users", "/upload", "/download", "/files", "/media", "/images", "/css", "/js", "/assets", "/public", "/private", "/secure", "/protected", "/system", "/core", "/lib", "/includes", "/modules", "/plugins", "/themes", "/templates", "/cache", "/tmp", "/logs", "/error", "/debug", "/dev", "/staging", "/beta"]
 user_agents = [
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)",
@@ -220,7 +220,7 @@ async def online(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await enviar_online_para_todos(context)
     await update.message.reply_text("Mensagem de online enviada para todos os usuários!")
 
-async async def verificar_site(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def verificar_site(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not context.args:
         await update.message.reply_text("❌ **Uso:** `/info <url>`\n\n**Exemplo:** `/info https://example.com`", parse_mode='Markdown')
         return
