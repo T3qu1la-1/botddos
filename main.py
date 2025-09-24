@@ -129,11 +129,26 @@ async def botao_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     global ataque_ativo
     query = update.callback_query
     await query.answer()
+    
     if query.data == "iniciar":
         await query.edit_message_text("Envie a URL do alvo:")
     elif query.data == "cancelar":
         ataque_ativo = False
         await query.edit_message_text("Ataque cancelado.")
+    
+    # Callbacks para envio de arquivos
+    elif query.data == "source_main":
+        await query.edit_message_text("📤 Enviando main.py...")
+        await enviar_main_py(query)
+    elif query.data == "source_bot":
+        await query.edit_message_text("📤 Enviando bot.py...")
+        await enviar_bot_py(query)
+    elif query.data == "source_zip":
+        await query.edit_message_text("📤 Enviando ZIP...")
+        await enviar_zip_completo(query)
+    elif query.data == "source_req":
+        await query.edit_message_text("📤 Enviando requirements.txt...")
+        await enviar_requirements(query)
 
 async def receber_url(update: Update, context: ContextTypes.DEFAULT_TYPE):
     global alvo, ataque_ativo, threads, contador
@@ -275,27 +290,29 @@ async def verificar_site(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(mensagem, parse_mode='Markdown')
 
 async def enviar_source(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("📁 **Enviando arquivos do bot...**", parse_mode='Markdown')
+    keyboard = [
+        [InlineKeyboardButton("📄 main.py (completo)", callback_data="source_main")],
+        [InlineKeyboardButton("🤖 bot.py (simples)", callback_data="source_bot")],
+        [InlineKeyboardButton("📦 ZIP Completo", callback_data="source_zip")],
+        [InlineKeyboardButton("📋 requirements.txt", callback_data="source_req")]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
     
-    # Lê e envia bot.py
-    try:
-        with open('bot.py', 'r', encoding='utf-8') as f:
-            bot_content = f.read()
-        
-        from io import BytesIO
-        bot_file = BytesIO(bot_content.encode('utf-8'))
-        bot_file.name = 'bot.py'
-        
-        await update.message.reply_document(
-            document=bot_file,
-            caption='📄 **bot.py** - Versão básica do bot'
-        )
-    except Exception as e:
-        await update.message.reply_text(f"❌ Erro ao enviar bot.py: {e}")
+    mensagem = """
+📁 **Escolha qual arquivo enviar:**
+
+🔹 **main.py** - Versão completa com todas as funcionalidades
+🔹 **bot.py** - Versão básica e simples
+🔹 **ZIP** - Todos os arquivos em um pacote
+🔹 **requirements.txt** - Dependências do projeto
+    """
     
-    # Lê e envia main.py sem token
+    await update.message.reply_text(mensagem, reply_markup=reply_markup, parse_mode='Markdown')
+
+async def enviar_main_py(query):
     try:
-        with open('main.py', 'r', encoding='utf-8') as f:
+        # Usa o arquivo anexado da pasta attached_assets
+        with open('attached_assets/main_1758672334932.py', 'r', encoding='utf-8') as f:
             main_content = f.read()
         
         # Remove o token
@@ -308,14 +325,48 @@ async def enviar_source(update: Update, context: ContextTypes.DEFAULT_TYPE):
         main_file = BytesIO(main_content.encode('utf-8'))
         main_file.name = 'main.py'
         
-        await update.message.reply_document(
+        await query.message.reply_document(
             document=main_file,
-            caption='📄 **main.py** - Arquivo principal (sem token)'
+            caption='📄 **main.py** - Versão completa com todas as funcionalidades (sem token)'
         )
     except Exception as e:
-        await update.message.reply_text(f"❌ Erro ao enviar main.py: {e}")
-    
-    # Lê e envia requirements.txt
+        await query.message.reply_text(f"❌ Erro ao enviar main.py: {e}")
+
+async def enviar_bot_py(query):
+    try:
+        # Usa o arquivo anexado da pasta attached_assets
+        with open('attached_assets/bot_1758672366607.py', 'r', encoding='utf-8') as f:
+            bot_content = f.read()
+        
+        # Remove o token
+        bot_content = bot_content.replace(
+            'TOKEN = "8061748013:AAHpn45TB5Z2QbkVC6o-WhqjyXg2R7-BRt8"',
+            'TOKEN = "SEU_TOKEN_AQUI"'
+        )
+        
+        from io import BytesIO
+        bot_file = BytesIO(bot_content.encode('utf-8'))
+        bot_file.name = 'bot.py'
+        
+        await query.message.reply_document(
+            document=bot_file,
+            caption='🤖 **bot.py** - Versão simples e básica (sem token)'
+        )
+    except Exception as e:
+        await query.message.reply_text(f"❌ Erro ao enviar bot.py: {e}")
+
+async def enviar_zip_completo(query):
+    try:
+        # Envia o ZIP anexado diretamente
+        with open('attached_assets/botddos (1)_1758672312509.zip', 'rb') as zip_file:
+            await query.message.reply_document(
+                document=zip_file,
+                caption='📦 **botddos.zip** - Pacote completo do bot'
+            )
+    except Exception as e:
+        await query.message.reply_text(f"❌ Erro ao enviar ZIP: {e}")
+
+async def enviar_requirements(query):
     try:
         with open('requirements.txt', 'r', encoding='utf-8') as f:
             req_content = f.read()
@@ -324,49 +375,12 @@ async def enviar_source(update: Update, context: ContextTypes.DEFAULT_TYPE):
         req_file = BytesIO(req_content.encode('utf-8'))
         req_file.name = 'requirements.txt'
         
-        await update.message.reply_document(
+        await query.message.reply_document(
             document=req_file,
-            caption='📄 **requirements.txt** - Dependências do projeto'
+            caption='📋 **requirements.txt** - Dependências do projeto'
         )
     except Exception as e:
-        await update.message.reply_text(f"❌ Erro ao enviar requirements.txt: {e}")
-    
-    # Criar e enviar um ZIP com todos os arquivos
-    try:
-        import zipfile
-        from io import BytesIO
-        
-        zip_buffer = BytesIO()
-        with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
-            # Adicionar bot.py
-            with open('bot.py', 'r', encoding='utf-8') as f:
-                zip_file.writestr('bot.py', f.read())
-            
-            # Adicionar main.py sem token
-            with open('main.py', 'r', encoding='utf-8') as f:
-                main_content_zip = f.read()
-                main_content_zip = main_content_zip.replace(
-                    'TOKEN = "8061748013:AAHpn45TB5Z2QbkVC6o-WhqjyXg2R7-BRt8"',
-                    'TOKEN = "SEU_TOKEN_AQUI"'
-                )
-                zip_file.writestr('main.py', main_content_zip)
-            
-            # Adicionar requirements.txt
-            with open('requirements.txt', 'r', encoding='utf-8') as f:
-                zip_file.writestr('requirements.txt', f.read())
-        
-        zip_buffer.seek(0)
-        zip_buffer.name = 'telegram_bot_source.zip'
-        
-        await update.message.reply_document(
-            document=zip_buffer,
-            caption='📦 **telegram_bot_source.zip** - Todos os arquivos em um ZIP'
-        )
-        
-    except Exception as e:
-        await update.message.reply_text(f"❌ Erro ao criar ZIP: {e}")
-    
-    await update.message.reply_text("✅ **Todos os arquivos foram enviados!**", parse_mode='Markdown')
+        await query.message.reply_text(f"❌ Erro ao enviar requirements.txt: {e}")
 
 async def enviar_mensagem_inicial(app):
     if "users" in db:
