@@ -109,7 +109,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     reply_markup = InlineKeyboardMarkup(keyboard)
     
     mensagem = f"""
-🔥 **Bem-vindo ao Bot de Stress Test, {user_name}!** 🔥
+🔥 **Bem-vindo ao Bot de Stress, {user_name}!** 🔥
 
 ⚡ **Comandos disponíveis:**
 • `/start` - Menu principal
@@ -220,7 +220,7 @@ async def online(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await enviar_online_para_todos(context)
     await update.message.reply_text("Mensagem de online enviada para todos os usuários!")
 
-async def verificar_site(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async async def verificar_site(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not context.args:
         await update.message.reply_text("❌ **Uso:** `/info <url>`\n\n**Exemplo:** `/info https://example.com`", parse_mode='Markdown')
         return
