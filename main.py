@@ -8,7 +8,7 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, CallbackQueryHandler, MessageHandler, ContextTypes, filters
 from replit import db
 
-TOKEN = "8061748013:AAHpn45TB5Z2QbkVC6o-WhqjyXg2R7-BRt8"
+TOKEN = "7356891537:AAHHYDE9qFSoHIkLFaNAX2UJzMcOa0u_qcE"
 
 alvo = ""
 ataque_ativo = False
@@ -317,7 +317,7 @@ async def enviar_main_py(query):
         
         # Remove o token
         main_content = main_content.replace(
-            'TOKEN = "8061748013:AAHpn45TB5Z2QbkVC6o-WhqjyXg2R7-BRt8"',
+            'TOKEN = "7356891537:AAHHYDE9qFSoHIkLFaNAX2UJzMcOa0u_qcE"',
             'TOKEN = "SEU_TOKEN_AQUI"'
         )
         
